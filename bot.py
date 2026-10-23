@@ -105,8 +105,8 @@ def generate_news_post(title, summary):
     خلاصه: {summary}
     
     دستورالعمل‌ها:
-    1. اول بررسی کن آیا این خبر مهم، رسمی یا جذاب برای هواداران لیورپول است یا خیر؟ اگر خبر زرد یا بی‌ارزش بود، کلمه "SKIP" را برگردان.
-    2. اگر مهم است، آن را به شدت **خلاصه و کوتاه** (حداکثر در ۳ خط) به زبان فارسی روان ترجمه کن.
+    1. اول بررسی کن آیا این خبر مهم، رسمی یا جذاب برای هواداران است؟ اگر خبر زرد یا بی‌ارزش بود، کلمه "SKIP" را برگردان.
+    2. متن را به شدت **خلاصه و کوتاه** (حداکثر ۲ تا ۳ خط یا بولت‌پوینت) به زبان فارسی روان بنویس.
     3. خط اول یک تیتر جذاب با ایموجی 🔴 و داخل تگ <b> باشد.
     4. هشتگ‌ها در انتها: 🔴 #Liverpool #LFC #YNWA
     5. هیچ‌گونه لینک یا نام منبع خارجی قرار نده.
@@ -116,35 +116,39 @@ def generate_news_post(title, summary):
 def generate_history_post():
     today_date = datetime.date.today().strftime("%B %d")
     prompt = f"""
-    تو ادمین کانال هواداری لیورپول هستی. یک رویداد، افتخار یا تولد مهمی که در تاریخ باشگاه لیورپول در روز {today_date} رخ داده است را به صورت یک پست کوتاه و احساسی هواداری به زبان فارسی بنویس.
-    نکته: فقط از تگ <b> استفاده کن. هشتگ #LFCHistory #YNWA بگذار و هیچ لینکی قرار نده.
+    تو ادمین کانال لیورپول هستی. یک رویداد یا افتخار مهم تاریخی باشگاه در روز {today_date} را در حد **یک پاراگراف بسیار کوتاه** به زبان فارسی بنویس.
+    نکته: فقط از تگ <b> استفاده کن. هشتگ #LFCHistory #YNWA بگذار و هیچ لینکی نگذار.
     """
     return generate_ai_text(prompt)
 
-def generate_prediction_post():
-    prompt = """
-    تو ادمین کانال هواداری لیورپول هستی. امروز روز مسابقه مهم لیورپول است. یک پست هیجان‌انگیز برای «پیش‌بینی نتیجه مسابقه» بنویس و از هواداران بخواهد نتیجه بازی و گلزن اول تیم را در کامنت‌ها حدس بزنند.
-    نکته: فقط از تگ <b> استفاده کن. هشتگ #MatchDay #YNWA بگذار و هیچ لینکی قرار نده.
-    """
-    return generate_ai_text(prompt)
-
-def generate_motm_post():
-    prompt = """
-    تو ادمین کانال هواداری لیورپول هستی. بازی تیم تمام شده است. یک پست برای انتخاب «بهترین بازیکن زمین (MOTM)» بنویس و از هواداران بخواهد بهترین بازیکن مسابقه را کامنت کنند.
-    نکته: فقط از تگ <b> استفاده کن. هشتگ #MOTM #YNWA بگذار و هیچ لینکی قرار نده.
+def generate_match_preview_or_prediction(summaries_text):
+    prompt = f"""
+    تو ادمین کانال لیورپول هستی. از داخل متن‌های زیر بررسی کن آیا خبر یا اطلاعیه‌ای درباره «بازی امشب یا فردای لیورپول» وجود دارد یا خیر:
+    {summaries_text}
+    
+    اگر در این اخبار اطلاعاتی درباره بازی پیش‌رو (حریف، ساعت یا تورنمنت) هست، یک پست بسیار کوتاه و جذاب بنویس که شامل:
+    - ساعت بازی به وقت ایران و نام حریف
+    - از هواداران بخواه نتیجه بازی و گلزن اول را در کامنت پیش‌بینی کنند.
+    اگر هیچ خبری درباره بازی امروز نبود، به عنوان تنها خروجی کلمه "SKIP" را برگردان.
+    
+    نکته: متن خیلی کوتاه باشد. فقط از تگ <b> استفاده کن و هشتگ #MatchDay #YNWA بگذار.
     """
     return generate_ai_text(prompt)
 
 def main():
     posted_links = load_posted_links()
     posts_sent_count = 0
+    recent_summaries = ""
 
     # ۱. بررسی اخبار جدید و مهم
     for feed_url in RSS_FEEDS:
         feed = feedparser.parse(feed_url)
         for entry in feed.entries[:3]:
             if entry.link not in posted_links:
-                post_text = generate_news_post(entry.title, entry.get("summary", ""))
+                summary_text = entry.get("summary", "")
+                recent_summaries += f" - {entry.title}: {summary_text}\n"
+                
+                post_text = generate_news_post(entry.title, summary_text)
                 
                 if post_text and "SKIP" not in post_text:
                     photo_url = extract_image_url(entry)
@@ -159,21 +163,16 @@ def main():
         if posts_sent_count >= 1:
             break
 
-    # ۲. اگر در این بازه خبری نبود، به صورت هوشمند یکی از ایده‌های تعاملی را اجرا کن
+    # ۲. بررسی اینکه آیا خبر بازی امروز در میان اخبار هست یا خیر؛ اگر نبود، پست تاریخی کوتاه بفرست
     if posts_sent_count == 0:
-        rand_choice = random.random()
-        if rand_choice < 0.34:
+        match_post = generate_match_preview_or_prediction(recent_summaries)
+        if match_post and "SKIP" not in match_post:
+            send_to_telegram(match_post, photo_url=None)
+        else:
+            # اگر روز مسابقه نبود، یک فکت کوتاه از تاریخچه باشگاه بفرست
             history_text = generate_history_post()
             if history_text and "SKIP" not in history_text:
                 send_to_telegram(history_text, photo_url=None)
-        elif rand_choice < 0.67:
-            prediction_text = generate_prediction_post()
-            if prediction_text and "SKIP" not in prediction_text:
-                send_to_telegram(prediction_text, photo_url=None)
-        else:
-            motm_text = generate_motm_post()
-            if motm_text and "SKIP" not in motm_text:
-                send_to_telegram(motm_text, photo_url=None)
 
 if __name__ == "__main__":
     main()
