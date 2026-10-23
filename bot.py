@@ -1,5 +1,6 @@
 import os
 import json
+import datetime
 import feedparser
 import requests
 from google import genai
@@ -103,11 +104,33 @@ def generate_news_post(title, summary):
     خلاصه: {summary}
     
     دستورالعمل‌ها:
-    1. اول بررسی کن آیا این خبر مهم، رسمی یا جذاب برای هواداران لیورپول است یا خیر؟ اگر خبر زرد، بی‌ارزش یا حاشیه پیش پاافتاده‌ای بود، کلمه "SKIP" را به عنوان تنها خروجی برگردان.
-    2. اگر خبر مهمی است، آن را به شدت **خلاصه، مفید و کوتاه** (حداکثر در ۳ خط یا ۳ بولت‌پوینت بسیار کوتاه) به زبان فارسی روان ترجمه کن.
+    1. اول بررسی کن آیا این خبر مهم، رسمی یا جذاب برای هواداران لیورپول است یا خیر؟ اگر خبر زرد یا بی‌ارزش بود، کلمه "SKIP" را برگردان.
+    2. اگر مهم است، آن را به شدت **خلاصه و کوتاه** (حداکثر در ۳ خط) به زبان فارسی روان ترجمه کن.
     3. خط اول یک تیتر جذاب با ایموجی 🔴 و داخل تگ <b> باشد.
     4. هشتگ‌ها در انتها: 🔴 #Liverpool #LFC #YNWA
     5. هیچ‌گونه لینک یا نام منبع خارجی قرار نده.
+    """
+    return generate_ai_text(prompt)
+
+def generate_history_post():
+    today_date = datetime.date.today().strftime("%B %d")
+    prompt = f"""
+    تو ادمین کانال هواداری لیورپول هستی. یک رویداد، افتخار یا تولد مهمی که در تاریخ باشگاه لیورپول در روز {today_date} رخ داده است را به صورت یک پست کوتاه و احساسی هواداری به زبان فارسی بنویس.
+    نکته: فقط از تگ <b> استفاده کن. هشتگ #LFCHistory #YNWA بگذار و هیچ لینکی قرار نده.
+    """
+    return generate_ai_text(prompt)
+
+def generate_prediction_post():
+    prompt = """
+    تو ادمین کانال هواداری لیورپول هستی. امروز روز مسابقه مهم لیورپول است. یک پست هیجان‌انگیز برای «پیش‌بینی نتیجه مسابقه» بنویس و از هواداران بخواهد نتیجه بازی و گلزن اول تیم را در کامنت‌ها حدس بزنند.
+    نکته: فقط از تگ <b> استفاده کن. هشتگ #MatchDay #YNWA بگذار و هیچ لینکی قرار نده.
+    """
+    return generate_ai_text(prompt)
+
+def generate_motm_post():
+    prompt = """
+    تو ادمین کانال هواداری لیورپول هستی. بازی تیم تمام شده است. یک پست برای انتخاب «بهترین بازیکن زمین (MOTM)» بنویس و از هواداران بخواهد بهترین بازیکن مسابقه را کامنت کنند.
+    نکته: فقط از تگ <b> استفاده کن. هشتگ #MOTM #YNWA بگذار و هیچ لینکی قرار نده.
     """
     return generate_ai_text(prompt)
 
@@ -115,7 +138,7 @@ def main():
     posted_links = load_posted_links()
     posts_sent_count = 0
 
-    # بررسی فیدها برای پیدا کردن خبر جدید و مهم
+    # ۱. بررسی اخبار جدید و مهم
     for feed_url in RSS_FEEDS:
         feed = feedparser.parse(feed_url)
         for entry in feed.entries[:3]:
@@ -130,10 +153,26 @@ def main():
                 posted_links.append(entry.link)
                 save_posted_links(posted_links)
                 
-                if posts_sent_count >= 2: # حداکثر 2 خبر در هر بار اجرا
+                if posts_sent_count >= 1:
                     break
-        if posts_sent_count >= 2:
+        if posts_sent_count >= 1:
             break
+
+    # ۲. اگر در این بازه خبری نبود، به صورت هوشمند یکی از ایده‌های تعاملی (تاریخچه، پیش‌بینی یا نظرسنجی) را بر اساس ساعت/شانس اجرا کن
+    if posts_sent_count == 0:
+        rand_choice = random.random()
+        if rand_choice < 0.34:
+            history_text = generate_history_post()
+            if history_text and "SKIP" not in history_text:
+                send_to_telegram(history_text, photo_url=None)
+        elif rand_choice < 0.67:
+            prediction_text = generate_prediction_post()
+            if prediction_text and "SKIP" not in prediction_text:
+                send_to_telegram(prediction_text, photo_url=None)
+        else:
+            motm_text = generate_motm_post()
+            if motm_text and "SKIP" not in motm_text:
+                send_to_telegram(motm_text, photo_url=None)
 
 if __name__ == "__main__":
     main()
