@@ -1,5 +1,6 @@
 import os
 import json
+import random
 import datetime
 import feedparser
 import requests
@@ -158,7 +159,7 @@ def main():
         if posts_sent_count >= 1:
             break
 
-    # ۲. اگر در این بازه خبری نبود، به صورت هوشمند یکی از ایده‌های تعاملی (تاریخچه، پیش‌بینی یا نظرسنجی) را بر اساس ساعت/شانس اجرا کن
+    # ۲. اگر در این بازه خبری نبود، به صورت هوشمند یکی از ایده‌های تعاملی را اجرا کن
     if posts_sent_count == 0:
         rand_choice = random.random()
         if rand_choice < 0.34:
