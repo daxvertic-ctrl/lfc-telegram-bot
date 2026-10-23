@@ -9,7 +9,7 @@ BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
-# 🛑 حتماً این بخش را به آیدی دقیق کانال خودتان تغییر دهید (مثلاً @YourChannelID)
+# آیدی کانال شما
 CHANNEL_USERNAME = "@LiverpoollIran"
 
 client = genai.Client(api_key=GEMINI_API_KEY)
@@ -130,13 +130,11 @@ def main():
             if entry.link not in posted_links:
                 post_text = generate_news_post(entry.title, entry.get("summary", ""))
                 
-                # اگر هوش مصنوعی تشخیص داد خبر مهم نیست و SKIP داد، رد شو
                 if post_text and "SKIP" not in post_text:
                     photo_url = extract_image_url(entry)
                     send_to_telegram(post_text, photo_url)
                     posts_sent_count += 1
                 
-                # لینک را ذخیره میکنیم تا دوباره بررسی نشود
                 posted_links.append(entry.link)
                 save_posted_links(posted_links)
                 
@@ -150,5 +148,5 @@ def main():
         if interactive_text and "SKIP" not in interactive_text:
             send_to_telegram(interactive_text, photo_url=None)
 
-if __name__ ==- "__main__":
+if __name__ == "__main__":
     main()
