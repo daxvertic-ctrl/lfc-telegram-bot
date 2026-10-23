@@ -9,7 +9,6 @@ BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
-# آیدی کانال شما
 CHANNEL_USERNAME = "@LiverpoollIran"
 
 client = genai.Client(api_key=GEMINI_API_KEY)
@@ -18,6 +17,13 @@ RSS_FEEDS = [
     "https://www.thisisanfield.com/feed/",
     "https://www.empireofthekop.com/feed/",
     "https://www.liverpool.com/liverpool-fc-news/?service=rss"
+]
+
+# لیست عکس‌های باکیفیت پشتیبان از اسطوره‌ها و بازیکنان لیورپول برای زمانی که خبری نیست
+BACKUP_PHOTOS = [
+    ("https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=1200", "🔴 شب‌های جادویی آنفیلد و عظمتی که تمامی ندارد... یس آر یو نه تنها یک شعار، بلکه یک سبک زندگی است! #YNWA"),
+    ("https://images.unsplash.com/photo-1518091043644-c1d4457512c6?q=80&w=1200", "🔴 قلب تپنده مرسی‌ساید؛ جایی که تاریخ با فوتبال معنا پیدا می‌کند. #LFC"),
+    ("https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=1200", "🔴 مبارزه تا آخرین ثانیه، این رسم قرمزهای آنفیلد است! #Liverpool")
 ]
 
 HISTORY_FILE = "posted_links.json"
@@ -105,18 +111,11 @@ def generate_news_post(title, summary):
     خلاصه: {summary}
     
     دستورالعمل‌ها:
-    1. اول بررسی کن آیا این خبر مهم، رسمی یا جذاب برای هواداران لیورپول است یا خیر؟ اگر خبر زرد، بی‌ارزش یا حاشیه پیش پاافتاده‌ای بود، کلمه "SKIP" را به عنوان تنها خروجی برگردان.
-    2. اگر خبر مهمی است، آن را به شدت **خلاصه، مفید و کوتاه** (حداکثر در ۳ خط یا ۳ بولت‌پوینت بسیار کوتاه) به زبان فارسی روان ترجمه کن.
+    1. اول بررسی کن آیا این خبر مهم یا جذاب برای هواداران لیورپول است یا خیر؟ اگر خبر زرد یا بی‌ارزش بود، کلمه "SKIP" را برگردان.
+    2. اگر مهم است، آن را به شدت **خلاصه و کوتاه** (حداکثر در ۳ خط) به زبان فارسی روان ترجمه کن.
     3. خط اول یک تیتر جذاب با ایموجی 🔴 و داخل تگ <b> باشد.
     4. هشتگ‌ها در انتها: 🔴 #Liverpool #LFC #YNWA
     5. هیچ‌گونه لینک یا نام منبع خارجی قرار نده.
-    """
-    return generate_ai_text(prompt)
-
-def generate_interactive_post():
-    prompt = """
-    تو ادمین کانال تلگرام لیورپول هستی. یک فکت تاریخی کوتاه و جذاب یا آمار مهم از باشگاه لیورپول بنویس. متن خیلی کوتاه باشد.
-    نکته: فقط از تگ <b> استفاده کن. هشتگ #YNWA بگذار و هیچ لینکی قرار نده.
     """
     return generate_ai_text(prompt)
 
@@ -124,9 +123,10 @@ def main():
     posted_links = load_posted_links()
     posts_sent_count = 0
 
+    # بررسی فیدها برای پیدا کردن خبر جدید
     for feed_url in RSS_FEEDS:
         feed = feedparser.parse(feed_url)
-        for entry in feed.entries[:5]:
+        for entry in feed.entries[:3]:
             if entry.link not in posted_links:
                 post_text = generate_news_post(entry.title, entry.get("summary", ""))
                 
@@ -138,15 +138,15 @@ def main():
                 posted_links.append(entry.link)
                 save_posted_links(posted_links)
                 
-                if posts_sent_count >= 2:
+                if posts_sent_count >= 1: # در هر بار اجرا حداکثر ۱ خبر مهم یا ۱ عکس ویژه
                     break
-        if posts_sent_count >= 2:
+        if posts_sent_count >= 1:
             break
 
-    if posts_sent_count == 0 and random.random() < 0.2:
-        interactive_text = generate_interactive_post()
-        if interactive_text and "SKIP" not in interactive_text:
-            send_to_telegram(interactive_text, photo_url=None)
+    # اگر در این نیم ساعت خبر مهمی نبود، یک عکس باکیفیت همراه با متن کوتاه هواداری بفرست
+    if posts_sent_count == 0:
+        photo_url, caption_text = random.choice(BACKUP_PHOTOS)
+        send_to_telegram(caption_text, photo_url)
 
 if __name__ == "__main__":
     main()
