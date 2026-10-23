@@ -9,8 +9,7 @@ BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
-# آیدی کانال شما برای درج در انتهای تمام پست‌ها
-CHANNEL_USERNAME = "@LiverpoolPersianFans"
+CHANNEL_USERNAME = "@LiverpoolPersianFans" # آیدی کانال خودتان
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
@@ -36,8 +35,8 @@ def generate_ai_text(prompt):
             if "gemini" in name.lower() and "2.5-flash" not in name.lower() and "2.0" not in name.lower() and "1.5" not in name.lower():
                 if name not in candidate_models:
                     candidate_models.append(name)
-    except Exception as e:
-        print(f"List models warning: {e}")
+    except Exception:
+        pass
 
     for model_name in candidate_models:
         try:
@@ -49,8 +48,7 @@ def generate_ai_text(prompt):
                 return response.text
         except Exception:
             continue
-            
-    raise Exception("No working Gemini model found!")
+    return None
 
 def load_posted_links():
     if os.path.exists(HISTORY_FILE):
@@ -60,47 +58,71 @@ def load_posted_links():
 
 def save_posted_links(links):
     with open(HISTORY_FILE, "w") as f:
-        json.dump(links[-150:], f) # نگهداری ۱۵۰ لینک آخر برای جلوگیری از تکرار
+        json.dump(links[-150:], f)
 
-def send_to_telegram(text):
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+def send_to_telegram(text, photo_url=None):
     full_text = f"{text}\n\n{CHANNEL_USERNAME}"
     
-    payload = {
-        "chat_id": CHAT_ID,
-        "text": full_text,
-        "parse_mode": "HTML",
-        "disable_web_page_preview": True
-    }
+    if photo_url:
+        # ارسال پست به همراه عکس
+        url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto"
+        payload = {
+            "chat_id": CHAT_ID,
+            "photo": photo_url,
+            "caption": full_text,
+            "parse_mode": "HTML"
+        }
+    else:
+        # ارسال به صورت متنی (اگر عکس نداشت)
+        url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
+        payload = {
+            "chat_id": CHAT_ID,
+            "text": full_text,
+            "parse_mode": "HTML",
+            "disable_web_page_preview": True
+        }
+        
     requests.post(url, json=payload)
+
+def extract_image_url(entry):
+    # تلاش برای پیدا کردن عکس شاخص در فید RSS
+    if 'media_content' in entry:
+        for media in entry.media_content:
+            if 'url' in media:
+                return media['url']
+    if 'media_thumbnail' in entry:
+        for thumb in entry.media_thumbnail:
+            if 'url' in thumb:
+                return thumb['url']
+    if 'links' in entry:
+        for link in entry.links:
+            if 'type' in link and 'image' in link['type']:
+                return link['href']
+    return None
 
 def generate_news_post(title, summary):
     prompt = f"""
     تو ادمین یک کانال تلگرامی پرشور و حرفه‌ای هواداری باشگاه لیورپول (Liverpool FC) هستی.
-    این خبر/گزارش جدید را بخوان و به یک پست تلگرامی جذاب به زبان فارسی روان تبدیل کن:
+    این خبر جدید را بخوان و به یک پست تلگرامی جذاب به زبان فارسی روان تبدیل کن:
     
     تیتر: {title}
     خلاصه: {summary}
     
     قوانین خروجی:
-    1. فقط از تگ‌های مجاز HTML تلگرام مثل <b>برای بولد کردن</b> استفاده کن (اصلاً از ستاره ** استفاده نکن).
+    1. فقط از تگ‌های مجاز HTML تلگرام مثل <b>برای بولد کردن</b> استفاده کن.
     2. خط اول یک تیتر جذاب با ایموجی قرمز (🔴 یا 🔥) و داخل تگ <b> باشد.
-    3. متن خبر یا آمار بازی را در ۲ تا ۳ پاراگراف کوتاه یا بولت‌پوینت (•) با ادبیات فوتبالی و هواداری بنویس.
-    4. در انتهای پست یک سوال کوتاه مرتبط با همین خبر از هواداران بپرس تا کامنت بگذارند.
+    3. متن خبر را در ۲ تا ۳ پاراگراف کوتاه یا بولت‌پوینت با ادبیات هواداری بنویس.
+    4. در انتهای پست یک سوال کوتاه از هواداران بپرس.
     5. هشتگ‌ها: 🔴 #Liverpool #LFC #YNWA
-    *(نکته بسیار مهم: به هیچ وجه لینک منبع، آدرس سایت خارجی یا اسم منبع را در متن قرار نده).*
+    *(بدون هیچ‌گونه لینک یا نام منبع خارجی).*
     """
     return generate_ai_text(prompt)
 
 def generate_interactive_post():
     prompt = """
     تو ادمین کانال تلگرام هواداران لیورپول هستی.
-    به صورت تصادفی یکی از این ۳ مورد را انتخاب کن و یک پست جذاب فارسی بنویس:
-    1. یک فکت تاریخی و آمار شگفت‌انگیز از تاریخ باشگاه لیورپول یا اسطوره‌های باشگاه (مثل استیون جرارد، یورگن کلوب، ویرجیل فن دایک یا سادیو مانه).
-    2. یک سوال چهارگزینه‌ای (کوییز هواداری) چالشی درباره بازی‌های خاطره‌انگیز یا آمار بازیکنان لیورپول (جواب را آخر پست در تگ اسپویلر <tg-spoiler>بنویس</tg-spoiler>).
-    3. یک پست بحث و تبادل نظر (مثلاً مقایسه دو بازیکن یا نظرخواهی درباره ترکیب تیم).
-    
-    نکته: فقط از تگ <b> برای بولد کردن استفاده کن و از ** استفاده نکن. هشتگ #YNWA بگذار و در انتها هیچ لینک خارجی نگذار.
+    یک فکت تاریخی، آمار شگفت‌انگیز یا سوال کوییز چالشی درباره باشگاه لیورپول بنویس.
+    نکته: فقط از تگ <b> استفاده کن. هشتگ #YNWA بگذار و هیچ لینکی قرار نده.
     """
     return generate_ai_text(prompt)
 
@@ -108,27 +130,24 @@ def main():
     posted_links = load_posted_links()
     posts_sent_count = 0
 
-    # بررسی فیدها و انتشار حداکثر ۲ خبر جدید در هر بار اجرا (برای جلوگیری از اسپم شدن کانال)
+    # بررسی فیدها و انتشار *تمام* اخبار جدید در هر ۳۰ دقیقه
     for feed_url in RSS_FEEDS:
         feed = feedparser.parse(feed_url)
         for entry in feed.entries[:5]:
             if entry.link not in posted_links:
                 post_text = generate_news_post(entry.title, entry.get("summary", ""))
-                send_to_telegram(post_text)
-                posted_links.append(entry.link)
-                save_posted_links(posted_links)
-                
-                posts_sent_count += 1
-                # اگر در این نوبت ۲ خبر فرستاد، متوقف شود تا در ۳۰ دقیقه بعدی بقیه را بفرستد
-                if posts_sent_count >= 2:
-                    break
-        if posts_sent_count >= 2:
-            break
+                if post_text:
+                    photo_url = extract_image_url(entry)
+                    send_to_telegram(post_text, photo_url)
+                    posted_links.append(entry.link)
+                    save_posted_links(posted_links)
+                    posts_sent_count += 1
 
-    # اگر هیچ خبر جدیدی نبود، با احتمال ۳۰ درصد یک پست فکت یا سوال تعاملی بفرست
+    # اگر در این ۳۰ دقیقه هیچ خبر جدیدی نبود، یک فکت یا پست تعاملی بفرست
     if posts_sent_count == 0 and random.random() < 0.3:
         interactive_text = generate_interactive_post()
-        send_to_telegram(interactive_text)
+        if interactive_text:
+            send_to_telegram(interactive_text, photo_url=None)
 
 if __name__ == "__main__":
     main()
