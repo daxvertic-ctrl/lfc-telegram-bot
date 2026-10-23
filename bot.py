@@ -11,6 +11,20 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
+# پیدا کردن خودکار جدیدترین مدل فعال در اکانت شما
+def get_active_model():
+    try:
+        for m in client.models.list():
+            name = m.name.replace("models/", "")
+            if "flash" in name.lower() and "gemini" in name.lower() and "vision" not in name.lower():
+                print(f"Using model: {name}")
+                return name
+    except Exception as e:
+        print(f"Model list error: {e}")
+    return "gemini-3-flash-preview"
+
+ACTIVE_MODEL = get_active_model()
+
 RSS_FEEDS = [
     "https://www.thisisanfield.com/feed/",
     "https://www.empireofthekop.com/feed/",
@@ -37,7 +51,8 @@ def send_to_telegram(text):
         "parse_mode": "HTML",
         "disable_web_page_preview": False
     }
-    requests.post(url, json=payload)
+    res = requests.post(url, json=payload)
+    print("Telegram response:", res.status_code, res.text)
 
 def generate_news_post(title, summary, link):
     prompt = f"""
@@ -55,7 +70,7 @@ def generate_news_post(title, summary, link):
     5. خط آخر: 🔴 #Liverpool #LFC #YNWA
     """
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model=ACTIVE_MODEL,
         contents=prompt
     )
     return f"{response.text}\n\n🔗 <a href='{link}'>منبع خبر</a>"
@@ -71,7 +86,7 @@ def generate_interactive_post():
     نکته: فقط از تگ <b> برای بولد کردن استفاده کن و از ** استفاده نکن. انتهای پست هشتگ #YNWA بگذار.
     """
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model=ACTIVE_MODEL,
         contents=prompt
     )
     return response.text
