@@ -11,20 +11,6 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
-# پیدا کردن خودکار جدیدترین مدل فعال در اکانت شما
-def get_active_model():
-    try:
-        for m in client.models.list():
-            name = m.name.replace("models/", "")
-            if "flash" in name.lower() and "gemini" in name.lower() and "vision" not in name.lower():
-                print(f"Using model: {name}")
-                return name
-    except Exception as e:
-        print(f"Model list error: {e}")
-    return "gemini-3-flash-preview"
-
-ACTIVE_MODEL = get_active_model()
-
 RSS_FEEDS = [
     "https://www.thisisanfield.com/feed/",
     "https://www.empireofthekop.com/feed/",
@@ -32,6 +18,43 @@ RSS_FEEDS = [
 ]
 
 HISTORY_FILE = "posted_links.json"
+
+def generate_ai_text(prompt):
+    # لیست مدل‌های جدید به ترتیب اولویت
+    candidate_models = [
+        "gemini-3-flash-preview",
+        "gemini-3.1-flash-lite-preview",
+        "gemini-3-flash",
+        "gemini-2.5-pro",
+        "gemini-flash-latest"
+    ]
+    
+    # اضافه کردن سایر مدل‌های موجود در اکانت به انتهای لیست
+    try:
+        for m in client.models.list():
+            name = m.name.replace("models/", "")
+            if "gemini" in name.lower() and "2.5-flash" not in name.lower() and "2.0" not in name.lower() and "1.5" not in name.lower():
+                if name not in candidate_models:
+                    candidate_models.append(name)
+    except Exception as e:
+        print(f"List models warning: {e}")
+
+    # تست یکی‌یکی مدل‌ها تا اولین مدلی که کار می‌کند پیدا شود
+    for model_name in candidate_models:
+        try:
+            print(f"Trying model: {model_name}...")
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt
+            )
+            if response and response.text:
+                print(f"Success with model: {model_name}!")
+                return response.text
+        except Exception as e:
+            print(f"Model {model_name} skipped: {e}")
+            continue
+            
+    raise Exception("No working Gemini model found!")
 
 def load_posted_links():
     if os.path.exists(HISTORY_FILE):
@@ -52,7 +75,7 @@ def send_to_telegram(text):
         "disable_web_page_preview": False
     }
     res = requests.post(url, json=payload)
-    print("Telegram response:", res.status_code, res.text)
+    print("Telegram status:", res.status_code, res.text)
 
 def generate_news_post(title, summary, link):
     prompt = f"""
@@ -69,11 +92,8 @@ def generate_news_post(title, summary, link):
     4. در انتهای پست یک سوال کوتاه مرتبط با همین خبر از هواداران بپرس تا کامنت بگذارند.
     5. خط آخر: 🔴 #Liverpool #LFC #YNWA
     """
-    response = client.models.generate_content(
-        model=ACTIVE_MODEL,
-        contents=prompt
-    )
-    return f"{response.text}\n\n🔗 <a href='{link}'>منبع خبر</a>"
+    ai_text = generate_ai_text(prompt)
+    return f"{ai_text}\n\n🔗 <a href='{link}'>منبع خبر</a>"
 
 def generate_interactive_post():
     prompt = """
@@ -85,11 +105,7 @@ def generate_interactive_post():
     
     نکته: فقط از تگ <b> برای بولد کردن استفاده کن و از ** استفاده نکن. انتهای پست هشتگ #YNWA بگذار.
     """
-    response = client.models.generate_content(
-        model=ACTIVE_MODEL,
-        contents=prompt
-    )
-    return response.text
+    return generate_ai_text(prompt)
 
 def main():
     posted_links = load_posted_links()
