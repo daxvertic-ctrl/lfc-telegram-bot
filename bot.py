@@ -9,7 +9,7 @@ BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
-# آیدی کانال شما برای درج در انتهای پست‌ها (می‌توانید آن را به آیدی کانال خودتان تغییر دهید)
+# آیدی کانال شما برای درج در انتهای تمام پست‌ها
 CHANNEL_USERNAME = "@LiverpoolPersianFans"
 
 client = genai.Client(api_key=GEMINI_API_KEY)
@@ -60,11 +60,10 @@ def load_posted_links():
 
 def save_posted_links(links):
     with open(HISTORY_FILE, "w") as f:
-        json.dump(links[-100:], f)
+        json.dump(links[-150:], f) # نگهداری ۱۵۰ لینک آخر برای جلوگیری از تکرار
 
 def send_to_telegram(text):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    # اضافه شدن آیدی کانال به انتهای همه پیام‌ها
     full_text = f"{text}\n\n{CHANNEL_USERNAME}"
     
     payload = {
@@ -89,7 +88,7 @@ def generate_news_post(title, summary):
     3. متن خبر یا آمار بازی را در ۲ تا ۳ پاراگراف کوتاه یا بولت‌پوینت (•) با ادبیات فوتبالی و هواداری بنویس.
     4. در انتهای پست یک سوال کوتاه مرتبط با همین خبر از هواداران بپرس تا کامنت بگذارند.
     5. هشتگ‌ها: 🔴 #Liverpool #LFC #YNWA
-    *(نکته مهم: به هیچ وجه لینک منبع یا نام سایت خارجی را در متن قرار نده).*
+    *(نکته بسیار مهم: به هیچ وجه لینک منبع، آدرس سایت خارجی یا اسم منبع را در متن قرار نده).*
     """
     return generate_ai_text(prompt)
 
@@ -101,29 +100,33 @@ def generate_interactive_post():
     2. یک سوال چهارگزینه‌ای (کوییز هواداری) چالشی درباره بازی‌های خاطره‌انگیز یا آمار بازیکنان لیورپول (جواب را آخر پست در تگ اسپویلر <tg-spoiler>بنویس</tg-spoiler>).
     3. یک پست بحث و تبادل نظر (مثلاً مقایسه دو بازیکن یا نظرخواهی درباره ترکیب تیم).
     
-    نکته: فقط از تگ <b> برای بولد کردن استفاده کن و از ** استفاده نکن. هشتگ #YNWA بگذار.
+    نکته: فقط از تگ <b> برای بولد کردن استفاده کن و از ** استفاده نکن. هشتگ #YNWA بگذار و در انتها هیچ لینک خارجی نگذار.
     """
     return generate_ai_text(prompt)
 
 def main():
     posted_links = load_posted_links()
-    new_post_sent = False
+    posts_sent_count = 0
 
+    # بررسی فیدها و انتشار حداکثر ۲ خبر جدید در هر بار اجرا (برای جلوگیری از اسپم شدن کانال)
     for feed_url in RSS_FEEDS:
         feed = feedparser.parse(feed_url)
-        for entry in feed.entries[:3]:
+        for entry in feed.entries[:5]:
             if entry.link not in posted_links:
-                # فراخوانی تابع بدون فرستادن لینک منبع به خروجی نهایی
                 post_text = generate_news_post(entry.title, entry.get("summary", ""))
                 send_to_telegram(post_text)
                 posted_links.append(entry.link)
                 save_posted_links(posted_links)
-                new_post_sent = True
-                break
-        if new_post_sent:
+                
+                posts_sent_count += 1
+                # اگر در این نوبت ۲ خبر فرستاد، متوقف شود تا در ۳۰ دقیقه بعدی بقیه را بفرستد
+                if posts_sent_count >= 2:
+                    break
+        if posts_sent_count >= 2:
             break
 
-    if not new_post_sent and random.random() < 0.3:
+    # اگر هیچ خبر جدیدی نبود، با احتمال ۳۰ درصد یک پست فکت یا سوال تعاملی بفرست
+    if posts_sent_count == 0 and random.random() < 0.3:
         interactive_text = generate_interactive_post()
         send_to_telegram(interactive_text)
 
