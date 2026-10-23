@@ -9,7 +9,8 @@ BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
-CHANNEL_USERNAME = "@LiverpoolPersianFans" # آیدی کانال خودتان
+# 🛑 حتماً این بخش را به آیدی دقیق کانال خودتان تغییر دهید (مثلاً @YourChannelID)
+CHANNEL_USERNAME = "@LiverpoollIran"
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
@@ -64,7 +65,6 @@ def send_to_telegram(text, photo_url=None):
     full_text = f"{text}\n\n{CHANNEL_USERNAME}"
     
     if photo_url:
-        # ارسال پست به همراه عکس
         url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto"
         payload = {
             "chat_id": CHAT_ID,
@@ -73,7 +73,6 @@ def send_to_telegram(text, photo_url=None):
             "parse_mode": "HTML"
         }
     else:
-        # ارسال به صورت متنی (اگر عکس نداشت)
         url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
         payload = {
             "chat_id": CHAT_ID,
@@ -85,7 +84,6 @@ def send_to_telegram(text, photo_url=None):
     requests.post(url, json=payload)
 
 def extract_image_url(entry):
-    # تلاش برای پیدا کردن عکس شاخص در فید RSS
     if 'media_content' in entry:
         for media in entry.media_content:
             if 'url' in media:
@@ -102,26 +100,22 @@ def extract_image_url(entry):
 
 def generate_news_post(title, summary):
     prompt = f"""
-    تو ادمین یک کانال تلگرامی پرشور و حرفه‌ای هواداری باشگاه لیورپول (Liverpool FC) هستی.
-    این خبر جدید را بخوان و به یک پست تلگرامی جذاب به زبان فارسی روان تبدیل کن:
-    
+    تو سردبیر یک کانال هواداری لیورپول هستی. این خبر را بررسی کن:
     تیتر: {title}
     خلاصه: {summary}
     
-    قوانین خروجی:
-    1. فقط از تگ‌های مجاز HTML تلگرام مثل <b>برای بولد کردن</b> استفاده کن.
-    2. خط اول یک تیتر جذاب با ایموجی قرمز (🔴 یا 🔥) و داخل تگ <b> باشد.
-    3. متن خبر را در ۲ تا ۳ پاراگراف کوتاه یا بولت‌پوینت با ادبیات هواداری بنویس.
-    4. در انتهای پست یک سوال کوتاه از هواداران بپرس.
-    5. هشتگ‌ها: 🔴 #Liverpool #LFC #YNWA
-    *(بدون هیچ‌گونه لینک یا نام منبع خارجی).*
+    دستورالعمل‌ها:
+    1. اول بررسی کن آیا این خبر مهم، رسمی یا جذاب برای هواداران لیورپول است یا خیر؟ اگر خبر زرد، بی‌ارزش یا حاشیه پیش پاافتاده‌ای بود، کلمه "SKIP" را به عنوان تنها خروجی برگردان.
+    2. اگر خبر مهمی است، آن را به شدت **خلاصه، مفید و کوتاه** (حداکثر در ۳ خط یا ۳ بولت‌پوینت بسیار کوتاه) به زبان فارسی روان ترجمه کن.
+    3. خط اول یک تیتر جذاب با ایموجی 🔴 و داخل تگ <b> باشد.
+    4. هشتگ‌ها در انتها: 🔴 #Liverpool #LFC #YNWA
+    5. هیچ‌گونه لینک یا نام منبع خارجی قرار نده.
     """
     return generate_ai_text(prompt)
 
 def generate_interactive_post():
     prompt = """
-    تو ادمین کانال تلگرام هواداران لیورپول هستی.
-    یک فکت تاریخی، آمار شگفت‌انگیز یا سوال کوییز چالشی درباره باشگاه لیورپول بنویس.
+    تو ادمین کانال تلگرام لیورپول هستی. یک فکت تاریخی کوتاه و جذاب یا آمار مهم از باشگاه لیورپول بنویس. متن خیلی کوتاه باشد.
     نکته: فقط از تگ <b> استفاده کن. هشتگ #YNWA بگذار و هیچ لینکی قرار نده.
     """
     return generate_ai_text(prompt)
@@ -130,24 +124,31 @@ def main():
     posted_links = load_posted_links()
     posts_sent_count = 0
 
-    # بررسی فیدها و انتشار *تمام* اخبار جدید در هر ۳۰ دقیقه
     for feed_url in RSS_FEEDS:
         feed = feedparser.parse(feed_url)
         for entry in feed.entries[:5]:
             if entry.link not in posted_links:
                 post_text = generate_news_post(entry.title, entry.get("summary", ""))
-                if post_text:
+                
+                # اگر هوش مصنوعی تشخیص داد خبر مهم نیست و SKIP داد، رد شو
+                if post_text and "SKIP" not in post_text:
                     photo_url = extract_image_url(entry)
                     send_to_telegram(post_text, photo_url)
-                    posted_links.append(entry.link)
-                    save_posted_links(posted_links)
                     posts_sent_count += 1
+                
+                # لینک را ذخیره میکنیم تا دوباره بررسی نشود
+                posted_links.append(entry.link)
+                save_posted_links(posted_links)
+                
+                if posts_sent_count >= 2:
+                    break
+        if posts_sent_count >= 2:
+            break
 
-    # اگر در این ۳۰ دقیقه هیچ خبر جدیدی نبود، یک فکت یا پست تعاملی بفرست
-    if posts_sent_count == 0 and random.random() < 0.3:
+    if posts_sent_count == 0 and random.random() < 0.2:
         interactive_text = generate_interactive_post()
-        if interactive_text:
+        if interactive_text and "SKIP" not in interactive_text:
             send_to_telegram(interactive_text, photo_url=None)
 
-if __name__ == "__main__":
+if __name__ ==- "__main__":
     main()
