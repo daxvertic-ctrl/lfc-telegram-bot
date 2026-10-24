@@ -1,10 +1,11 @@
 import os
 import json
-import random
+import time
 import datetime
 import urllib.parse
 import feedparser
 import requests
+from bs4 import BeautifulSoup
 from google import genai
 
 BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
@@ -15,21 +16,20 @@ CHANNEL_USERNAME = "@LiverpoollIran"
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
+# منابع مستقیم و به‌روز که هم عکس دارند و هم متن کامل
 MAIN_RSS_FEEDS = [
-    "https://www.thisisanfield.com/feed/",
-    "https://www.empireofthekop.com/feed/",
-    "https://www.liverpool.com/liverpool-fc-news/?service=rss"
+    ("This Is Anfield", "https://www.thisisanfield.com/feed/"),
+    ("Empire of the Kop", "https://www.empireofthekop.com/feed/"),
+    ("Liverpool.com", "https://www.liverpool.com/liverpool-fc-news/?service=rss"),
+    ("Liverpool Echo", "https://www.liverpoolecho.co.uk/all-about/liverpool-fc?service=rss"),
+    ("BBC Sport", "https://feeds.bbci.co.uk/sport/football/teams/liverpool/rss.xml")
 ]
 
+# جستجوی خبرنگاران معتبر و مصاحبه‌ها فقط برای ۲۴ ساعت گذشته
 JOURNALIST_QUERIES = [
-    'Liverpool ("Fabrizio Romano" OR @FabrizioRomano OR "David Ornstein" OR @David_Ornstein)',
-    'Liverpool ("Florian Plettenberg" OR @Plettigoal OR "Di Marzio" OR @DiMarzio)',
-    'Liverpool ("Ben Jacobs" OR @JacobsBen OR "Matteo Moretto" OR @MatteMoretto)',
-    'Liverpool ("Simon Stone" OR @sistoney67 OR "Gerard Romero" OR @gerardromero)',
-    'Liverpool (site:skysports.com OR site:bbc.co.uk/sport OR site:nytimes.com/athletic OR site:espn.com)'
+    'Liverpool ("Fabrizio Romano" OR "David Ornstein" OR "Florian Plettenberg" OR "Di Marzio" OR "Ben Jacobs" OR "Matteo Moretto" OR "Simon Stone" OR "Gerard Romero") when:1d',
+    'Liverpool ("Andoni Iraola" OR "press conference" OR interview) when:1d'
 ]
-
-INTERVIEW_QUERY = 'Liverpool ("press conference" OR interview OR quotes OR "Arne Slot" OR "Van Dijk" OR Salah) when:2h'
 
 HISTORY_FILE = "posted_links.json"
 QUEUE_FILE = "post_queue.json"
@@ -42,15 +42,6 @@ def generate_ai_text(prompt):
         "gemini-2.5-pro",
         "gemini-flash-latest"
     ]
-    try:
-        for m in client.models.list():
-            name = m.name.replace("models/", "")
-            if "gemini" in name.lower() and "2.5-flash" not in name.lower() and "2.0" not in name.lower() and "1.5" not in name.lower():
-                if name not in candidate_models:
-                    candidate_models.append(name)
-    except Exception:
-        pass
-
     for model_name in candidate_models:
         try:
             response = client.models.generate_content(
@@ -76,6 +67,58 @@ def save_json_file(filename, data):
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
+def is_entry_recent(entry, max_hours=24):
+    """بررسی دقیق تاریخ خبر: اگر قدیمی‌تر از ۲۴ ساعت باشد رد می‌شود"""
+    parsed_time = entry.get("published_parsed") or entry.get("updated_parsed")
+    if not parsed_time:
+        return True
+    entry_timestamp = time.mktime(parsed_time)
+    now_timestamp = time.time()
+    diff_hours = (now_timestamp - entry_timestamp) / 3600.0
+    return -2 <= diff_hours <= max_hours
+
+def scrape_article_data(url):
+    """باز کردن لینک خبر برای استخراج عکس باکیفیت و متن واقعی مقاله"""
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    }
+    photo_url = None
+    article_text = ""
+    try:
+        res = requests.get(url, headers=headers, timeout=10, allow_redirects=True)
+        if res.status_code == 200:
+            soup = BeautifulSoup(res.text, "html.parser")
+            
+            # ۱. پیدا کردن عکس اصلی و باکیفیت خبر (og:image)
+            og_img = soup.find("meta", property="og:image") or soup.find("meta", attrs={"name": "twitter:image"})
+            if og_img and og_img.get("content"):
+                img_candidate = og_img["content"]
+                if "lh3.googleusercontent.com" not in img_candidate and "google.com" not in img_candidate:
+                    photo_url = img_candidate
+                    
+            # ۲. استخراج پاراگراف‌های اول متن واقعی خبر
+            paragraphs = soup.find_all("p")
+            valid_p = [p.get_text().strip() for p in paragraphs if len(p.get_text().strip()) > 60]
+            article_text = "\n".join(valid_p[:5])
+    except Exception:
+        pass
+    return photo_url, article_text
+
+def extract_rss_image(entry):
+    if 'media_content' in entry:
+        for media in entry.media_content:
+            if 'url' in media:
+                return media['url']
+    if 'media_thumbnail' in entry:
+        for thumb in entry.media_thumbnail:
+            if 'url' in thumb:
+                return thumb['url']
+    if 'links' in entry:
+        for link in entry.links:
+            if 'type' in link and 'image' in link['type']:
+                return link['href']
+    return None
+
 def send_to_telegram(text, photo_url=None):
     full_text = f"{text}\n\n🆔 {CHANNEL_USERNAME}"
     
@@ -100,49 +143,34 @@ def send_to_telegram(text, photo_url=None):
     }
     requests.post(url, json=payload)
 
-def extract_image_url(entry):
-    if 'media_content' in entry:
-        for media in entry.media_content:
-            if 'url' in media:
-                return media['url']
-    if 'media_thumbnail' in entry:
-        for thumb in entry.media_thumbnail:
-            if 'url' in thumb:
-                return thumb['url']
-    if 'links' in entry:
-        for link in entry.links:
-            if 'type' in link and 'image' in link['type']:
-                return link['href']
-    return None
-
-def build_google_news_rss(query):
-    encoded = urllib.parse.quote(query)
-    return f"https://news.google.com/rss/search?q={encoded}&hl=en-GB&gl=GB&ceid=GB:en"
-
-def evaluate_and_format_item(title, summary, category="news"):
+def evaluate_and_format_item(title, full_content, source_name):
+    today_str = datetime.date.today().strftime("%Y-%m-%d")
     prompt = f"""
     تو سردبیر ارشد کانال تلگرامی هواداران لیورپول هستی.
-    این اطلاعات خبر را بررسی کن:
-    دسته: {category}
-    تیتر اصلی: {title}
-    متن یا خلاصه خبر: {summary}
+    تاریخ امروز: {today_str} (سال 2026).
+    
+    ⚠️ قوانین بسیار مهم (خط قرمز):
+    1. الان سال 2026 است! سرمربی فعلی لیورپول «آندونی ایرائولا» (Andoni Iraola) است. آرنه اسلوت دیگر مربی لیورپول نیست و محمد صلاح و ترنت الکساندر آرنولد دیگر در تیم نیستند.
+    2. **مطلقاً از حافظه قدیمی خودت هیچ اسم، بازیکن، مربی یا داستانی را به خبر اضافه نکن!** فقط و فقط بر اساس متن زیر ترجمه و خلاصه‌نویسی کن.
+    3. اگر دیدی متن خبر ناقص است، یا مربوط به سال‌های گذشته است، یا درباره اسلوت/صلاح در گذشته است، یا ارزش خبری ندارد، فقط کلمه SKIP را برگردان.
 
-    دستورالعمل‌ها و خط قرمزهای بسیار مهم:
-    1. اگر خبر زرد، شایعه بی‌اساس، تکراری یا نامرتبط با لیورپول است، فقط و فقط کلمه SKIP را برگردان.
-    2. **به هیچ وجه به گفتن یک تیتر خالی اکتفا نکن!** حتماً در قالب ۲ تا ۳ خط، جزئیات، نام بازیکنان، نام تیم‌ها و اصل ماجرا را به زبان فارسی روان توضیح بده تا کامل و قابل فهم باشد (هیچ ابهامی در متن نباشد).
-    3. اگر خبر مربوط به خبرنگاران سرشناس (مثل فابریتزیو رومانو، دیوید اورنشتاین، اسکای اسپورتس و...) است، حتماً **نام منبع یا خبرنگار** را در خط اول ذکر کن (مثلاً: 🚨 <b>به گزارش فابریتزیو رومانو:</b> یا <b>به نقل از دیوید اورنشتاین:</b>).
-    4. به اهمیت خبر از 1 تا 10 امتیاز بده.
-    5. خروجی باید دقیقاً در این قالب باشد:
-    SCORE: [عدد امتیاز 1 تا 10]
-    [متن کامل و جذاب خبر برای تلگرام]
+    منبع خبر: {source_name}
+    تیتر: {title}
+    متن کامل دریافتی از سایت:
+    {full_content}
 
-    قوانین نگارش:
-    - فقط از تگ <b> استفاده کن و اصلاً از ستاره ** استفاده نکن.
-    - هیچ لینک یا آدرس سایتی قرار نده.
-    - خط آخر هشتگ‌ها: 🔴 #Liverpool #LFC #YNWA
+    دستورالعمل خروجی:
+    - به اهمیت خبر از 1 تا 10 امتیاز بده.
+    - خط اول خروجی فقط عدد امتیاز باشد: SCORE: [عدد]
+    - از خط دوم متن پست تلگرام را بنویس:
+      * خط اول پست: 🔴 <b>تیتر جذاب خبر</b>
+      * خط دوم: 📰 <b>منبع: {source_name}</b> (اگر نام خبرنگار خاصی مثل فابریتزیو رومانو، دیوید اورنشتاین، پلتنبرگ، دی‌مارتزیو و... در متن هست نام او را هم بنویس)
+      * در 2 تا 3 خط، اصل خبر و جزئیات واقعی موجود در متن بالا را به فارسی روان و دقیق بنویس تا خبر کاملاً واضح باشد.
+      * فقط از تگ <b> استفاده کن (از ** استفاده نکن).
+      * خط آخر: 🔴 #Liverpool #LFC #YNWA
     """
     res = generate_ai_text(prompt)
-    if not res or "SKIP" in res[:15]:
+    if not res or "SKIP" in res[:20]:
         return 0, None
 
     lines = res.split("\n")
@@ -163,73 +191,73 @@ def evaluate_and_format_item(title, summary, category="news"):
         return 0, None
     return score, final_text
 
-def collect_journalist_updates(posted_links):
-    candidates = []
-    selected_queries = random.sample(JOURNALIST_QUERIES, min(3, len(JOURNALIST_QUERIES)))
-    for q in selected_queries:
-        rss_url = build_google_news_rss(q + " when:1h")
-        feed = feedparser.parse(rss_url)
-        for entry in feed.entries[:2]:
-            if entry.link not in posted_links:
-                score, text = evaluate_and_format_item(entry.title, entry.get("summary", ""), category="x_journalist")
-                posted_links.append(entry.link)
-                if text and score >= 6:
-                    candidates.append({
-                        "score": score,
-                        "text": text,
-                        "photo": extract_image_url(entry)
-                    })
-    return candidates
+def process_entry(entry, default_source, posted_links):
+    if entry.link in posted_links:
+        return None
+    if not is_entry_recent(entry, max_hours=24):
+        posted_links.append(entry.link)
+        return None
 
-def collect_hourly_news_and_interviews(posted_links):
-    candidates = []
+    scraped_photo, scraped_text = scrape_article_data(entry.link)
+    photo_url = extract_rss_image(entry) or scraped_photo
     
-    interview_rss = build_google_news_rss(INTERVIEW_QUERY)
-    int_feed = feedparser.parse(interview_rss)
-    for entry in int_feed.entries[:2]:
-        if entry.link not in posted_links:
-            score, text = evaluate_and_format_item(entry.title, entry.get("summary", ""), category="interview")
-            posted_links.append(entry.link)
-            if text and score >= 6:
-                candidates.append({
-                    "score": score + 1,
-                    "text": text,
-                    "photo": extract_image_url(entry)
-                })
+    summary_clean = BeautifulSoup(entry.get("summary", ""), "html.parser").get_text()
+    full_content = f"{summary_clean}\n{scraped_text}".strip()
 
-    for feed_url in MAIN_RSS_FEEDS:
-        feed = feedparser.parse(feed_url)
-        for entry in feed.entries[:3]:
-            if entry.link not in posted_links:
-                score, text = evaluate_and_format_item(entry.title, entry.get("summary", ""), category="news")
-                posted_links.append(entry.link)
-                if text and score >= 6:
-                    candidates.append({
-                        "score": score,
-                        "text": text,
-                        "photo": extract_image_url(entry)
-                    })
-                    
-    return candidates
+    if len(full_content) < 80:
+        posted_links.append(entry.link)
+        return None
+
+    source_title = default_source
+    if "source" in entry and "title" in entry.source:
+        source_title = entry.source.title
+
+    score, text = evaluate_and_format_item(entry.title, full_content, source_title)
+    posted_links.append(entry.link)
+
+    if text and score >= 7:
+        return {
+            "score": score,
+            "text": text,
+            "photo": photo_url,
+            "v": 2  # برچسب نسخه جدید برای حذف خودکار خبرهای قدیمی از صف
+        }
+    return None
 
 def main():
     posted_links = load_json_file(HISTORY_FILE, [])
-    post_queue = load_json_file(QUEUE_FILE, [])
+    raw_queue = load_json_file(QUEUE_FILE, [])
+    
+    # پاکسازی خودکار خبرهای قدیمی از صف انتظار قبلی
+    post_queue = [item for item in raw_queue if item.get("v") == 2]
     
     now = datetime.datetime.utcnow()
     is_full_hour_check = (now.minute < 30)
 
     new_candidates = []
 
-    journalist_items = collect_journalist_updates(posted_links)
-    new_candidates.extend(journalist_items)
-
+    # ۱. بررسی فیدهای اصلی لیورپول (همراه با عکس و متن کامل)
     if is_full_hour_check or len(post_queue) == 0:
-        hourly_items = collect_hourly_news_and_interviews(posted_links)
-        new_candidates.extend(hourly_items)
+        for source_name, feed_url in MAIN_RSS_FEEDS:
+            feed = feedparser.parse(feed_url)
+            for entry in feed.entries[:3]:
+                item = process_entry(entry, source_name, posted_links)
+                if item:
+                    new_candidates.append(item)
+
+    # ۲. بررسی خبرنگاران و مصاحبه‌های روز
+    for q in JOURNALIST_QUERIES:
+        encoded = urllib.parse.quote(q)
+        rss_url = f"https://news.google.com/rss/search?q={encoded}&hl=en-GB&gl=GB&ceid=GB:en"
+        feed = feedparser.parse(rss_url)
+        for entry in feed.entries[:2]:
+            item = process_entry(entry, "رسانه‌های ورزشی انگلیس", posted_links)
+            if item:
+                new_candidates.append(item)
 
     all_items = post_queue + new_candidates
-    all_items.sort(key=lambda x: x["score"], reverse=True)
+    # اولویت با بالاترین امتیاز و خبرهایی که عکس دارند
+    all_items.sort(key=lambda x: (x["score"], 1 if x.get("photo") else 0), reverse=True)
 
     if len(all_items) > 0:
         top_post = all_items.pop(0)
@@ -238,7 +266,7 @@ def main():
     else:
         post_queue = []
 
-    save_json_file(HISTORY_FILE, posted_links[-200:])
+    save_json_file(HISTORY_FILE, posted_links[-250:])
     save_json_file(QUEUE_FILE, post_queue)
 
 if __name__ == "__main__":
