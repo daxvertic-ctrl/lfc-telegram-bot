@@ -1,4 +1,5 @@
 import os
+import io
 import json
 import time
 import datetime
@@ -6,6 +7,7 @@ import urllib.parse
 import feedparser
 import requests
 from bs4 import BeautifulSoup
+from PIL import Image, ImageDraw, ImageFont
 from google import genai
 
 BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
@@ -16,7 +18,6 @@ CHANNEL_USERNAME = "@LiverpoollIran"
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
-# منابع مستقیم و به‌روز که هم عکس دارند و هم متن کامل
 MAIN_RSS_FEEDS = [
     ("This Is Anfield", "https://www.thisisanfield.com/feed/"),
     ("Empire of the Kop", "https://www.empireofthekop.com/feed/"),
@@ -25,7 +26,6 @@ MAIN_RSS_FEEDS = [
     ("BBC Sport", "https://feeds.bbci.co.uk/sport/football/teams/liverpool/rss.xml")
 ]
 
-# جستجوی خبرنگاران معتبر و مصاحبه‌ها فقط برای ۲۴ ساعت گذشته
 JOURNALIST_QUERIES = [
     'Liverpool ("Fabrizio Romano" OR "David Ornstein" OR "Florian Plettenberg" OR "Di Marzio" OR "Ben Jacobs" OR "Matteo Moretto" OR "Simon Stone" OR "Gerard Romero") when:1d',
     'Liverpool ("Andoni Iraola" OR "press conference" OR interview) when:1d'
@@ -68,7 +68,6 @@ def save_json_file(filename, data):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 def is_entry_recent(entry, max_hours=24):
-    """بررسی دقیق تاریخ خبر: اگر قدیمی‌تر از ۲۴ ساعت باشد رد می‌شود"""
     parsed_time = entry.get("published_parsed") or entry.get("updated_parsed")
     if not parsed_time:
         return True
@@ -77,8 +76,67 @@ def is_entry_recent(entry, max_hours=24):
     diff_hours = (now_timestamp - entry_timestamp) / 3600.0
     return -2 <= diff_hours <= max_hours
 
+def load_font(size):
+    font_paths = [
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+        "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
+    ]
+    for path in font_paths:
+        if os.path.exists(path):
+            try:
+                return ImageFont.truetype(path, size)
+            except Exception:
+                pass
+    return ImageFont.load_default()
+
+def download_and_watermark_image(photo_url):
+    """دانلود عکس خبر و حک کردن واترمارک گرافیکی @LiverpoollIran روی آن"""
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    }
+    try:
+        res = requests.get(photo_url, headers=headers, timeout=12)
+        if res.status_code != 200:
+            return None
+        img = Image.open(io.BytesIO(res.content)).convert("RGBA")
+        w, h = img.size
+        if w < 250 or h < 200:
+            return None
+
+        overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+        draw = ImageDraw.Draw(overlay)
+
+        font_size = max(18, int(w * 0.028))
+        font = load_font(font_size)
+        watermark_text = "LFC IRAN | @LiverpoollIran"
+
+        bbox = draw.textbbox((0, 0), watermark_text, font=font)
+        tw = bbox[2] - bbox[0]
+        th = bbox[3] - bbox[1]
+
+        pad_x = int(font_size * 0.7)
+        pad_y = int(font_size * 0.45)
+        margin = int(w * 0.025)
+
+        x1 = w - tw - (pad_x * 2) - margin
+        y1 = h - th - (pad_y * 2) - margin
+        x2 = w - margin
+        y2 = h - margin
+
+        # کادر شیشه‌ای تیره با نوار قرمز لیورپول در کنار آن
+        draw.rounded_rectangle([x1, y1, x2, y2], radius=8, fill=(15, 15, 20, 215))
+        draw.rounded_rectangle([x1, y1, x1 + 6, y2], radius=3, fill=(200, 16, 46, 255))
+        draw.text((x1 + pad_x + 4, y1 + pad_y - 2), watermark_text, font=font, fill=(255, 255, 255, 250))
+
+        final_img = Image.alpha_composite(img, overlay).convert("RGB")
+        buf = io.BytesIO()
+        final_img.save(buf, format="JPEG", quality=92)
+        buf.seek(0)
+        return buf
+    except Exception:
+        return None
+
 def scrape_article_data(url):
-    """باز کردن لینک خبر برای استخراج عکس باکیفیت و متن واقعی مقاله"""
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
     }
@@ -88,15 +146,11 @@ def scrape_article_data(url):
         res = requests.get(url, headers=headers, timeout=10, allow_redirects=True)
         if res.status_code == 200:
             soup = BeautifulSoup(res.text, "html.parser")
-            
-            # ۱. پیدا کردن عکس اصلی و باکیفیت خبر (og:image)
             og_img = soup.find("meta", property="og:image") or soup.find("meta", attrs={"name": "twitter:image"})
             if og_img and og_img.get("content"):
                 img_candidate = og_img["content"]
                 if "lh3.googleusercontent.com" not in img_candidate and "google.com" not in img_candidate:
                     photo_url = img_candidate
-                    
-            # ۲. استخراج پاراگراف‌های اول متن واقعی خبر
             paragraphs = soup.find_all("p")
             valid_p = [p.get_text().strip() for p in paragraphs if len(p.get_text().strip()) > 60]
             article_text = "\n".join(valid_p[:5])
@@ -123,6 +177,21 @@ def send_to_telegram(text, photo_url=None):
     full_text = f"{text}\n\n🆔 {CHANNEL_USERNAME}"
     
     if photo_url:
+        # ابتدا تلاش برای دانلود، واترمارک کردن و آپلود مستقیم عکس اختصاصی
+        watermarked_buf = download_and_watermark_image(photo_url)
+        if watermarked_buf:
+            url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto"
+            data = {
+                "chat_id": CHAT_ID,
+                "caption": full_text,
+                "parse_mode": "HTML"
+            }
+            files = {"photo": ("lfc_iran.jpg", watermarked_buf, "image/jpeg")}
+            res = requests.post(url, data=data, files=files)
+            if res.status_code == 200:
+                return
+
+        # در صورتی که دانلود عکس مسدود بود، ارسال مستقیم از طریق لینک
         url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto"
         payload = {
             "chat_id": CHAT_ID,
@@ -220,15 +289,13 @@ def process_entry(entry, default_source, posted_links):
             "score": score,
             "text": text,
             "photo": photo_url,
-            "v": 2  # برچسب نسخه جدید برای حذف خودکار خبرهای قدیمی از صف
+            "v": 2
         }
     return None
 
 def main():
     posted_links = load_json_file(HISTORY_FILE, [])
     raw_queue = load_json_file(QUEUE_FILE, [])
-    
-    # پاکسازی خودکار خبرهای قدیمی از صف انتظار قبلی
     post_queue = [item for item in raw_queue if item.get("v") == 2]
     
     now = datetime.datetime.utcnow()
@@ -236,7 +303,6 @@ def main():
 
     new_candidates = []
 
-    # ۱. بررسی فیدهای اصلی لیورپول (همراه با عکس و متن کامل)
     if is_full_hour_check or len(post_queue) == 0:
         for source_name, feed_url in MAIN_RSS_FEEDS:
             feed = feedparser.parse(feed_url)
@@ -245,7 +311,6 @@ def main():
                 if item:
                     new_candidates.append(item)
 
-    # ۲. بررسی خبرنگاران و مصاحبه‌های روز
     for q in JOURNALIST_QUERIES:
         encoded = urllib.parse.quote(q)
         rss_url = f"https://news.google.com/rss/search?q={encoded}&hl=en-GB&gl=GB&ceid=GB:en"
@@ -256,7 +321,6 @@ def main():
                 new_candidates.append(item)
 
     all_items = post_queue + new_candidates
-    # اولویت با بالاترین امتیاز و خبرهایی که عکس دارند
     all_items.sort(key=lambda x: (x["score"], 1 if x.get("photo") else 0), reverse=True)
 
     if len(all_items) > 0:
