@@ -20,8 +20,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
-        run: pip install feedparser requests google-genai beautifulsoup4
+      - name: Install dependencies and fonts
+        run: |
+          sudo apt-get update && sudo apt-get install -y fonts-dejavu-core
+          pip install feedparser requests google-genai beautifulsoup4 Pillow
 
       - name: Run News Bot (Bot 1)
         env:
