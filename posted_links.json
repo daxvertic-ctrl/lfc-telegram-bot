@@ -1,8 +1,4 @@
 [
-  "https://www.liverpoolecho.co.uk/sport/football/football-news/liverpool-transfer-news-ndukwe-otorbi-34809269",
-  "https://www.bbc.co.uk/sport/football/videos/cmvg6qxp6lj7o?at_medium=RSS&at_campaign=rss",
-  "https://www.bbc.co.uk/sport/football/articles/cmed36n7qge3o?at_medium=RSS&at_campaign=rss",
-  "https://www.bbc.co.uk/sport/football/videos/ck20w57lqyexo?at_medium=RSS&at_campaign=rss",
   "https://news.google.com/rss/articles/CBMikgFBVV95cUxOQzZFdWFFZlV2UllGV2NvQkRlRGYzRUI4ZkhEYzc0bmYtU3g5T0hSVmprTnJ2NkkxcERwV0d0bC0xWG1tbGVpSEQ0UUhaSG9ORXZTVnUteHdJcExRUHJVX0xrVUNIYXFDSzVMMTNDZ0kwSndTeUh5X0hrUzRpSUo4ZDNSS0Jqc3VoTENWR3NvV3pxZ9IBlwFBVV95cUxOVnM3c2hOLUhaTDBTem9LaG82OFJuZC1DMm9BejNidlgwUkJ2Ym1SQ1Exd3hrYWhLLVpmNUs1WFl0eFRhYmxIMDRtWXgzdWkzSGhJa0QyV1dlM3NKU18zeWIydlBkWV9qVEJHU05ZYjRaZ09BYTRFazlTUzQ2cTk1RkpjcF9iSzIxeHNVX2NBOGhtRGFmVzFv?oc=5",
   "https://news.google.com/rss/articles/CBMiggFBVV95cUxQWmx1YjNkSi1QaTJmTHpGZTdQWERQVmpTZV9xR2VzLWVKTVFkcXd3TldlWkVmaGUwQWNZNExCWEhKcnlUMC1GX1JwTHY2Mlp3NEpqTFlRcm9rODluTmRyUktNNW1KaFY3eHZLTHVlWEFERWtJMHFtMHIzZDlNblUxQnhn?oc=5",
   "https://www.thisisanfield.com/2026/10/liverpool-vs-brighton-preview-team-news-lineups-storm-boelo-tv/",
@@ -248,5 +244,9 @@
   "https://news.google.com/rss/articles/CBMi6gFBVV95cUxQUVpzOFhLUVVESENSNlM4MzJQaDVlMEQ1eWJNRXo1TEFsOHNIcUFUY2hoQmlLS1A4MHNWQ0pPbXdSR0tnaWxMejR0ejFBMjl5TVhUd3dTaDY5NzNwemJReTFENkJqZmtFNXlTWUpReG44WTZOMDhWYU1qQzhfZ3JJM3ZVZmZIMnVYVjhnZ2NoMS16QlhReVJTNFBySWFGbVpGNjFSR2VkcWdfSm95OEhKdTFTQ3pzSm1TVndlZlZUMW9OOGlTRjNybDZ0SW5VWU5TeXB4UUt3WU1mY1poYnJSTXRzYW5ZSDlNUEE?oc=5",
   "https://www.liverpool.com/liverpool-fc-news/features/trey-nyoni-ronald-araujo-iraola-34826290",
   "https://www.liverpoolecho.co.uk/sport/football/football-news/ryan-giggs-actually-right-viral-34824809",
-  "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPbkRJOEc3WTdqUkVsMWZpR3N3eEdQOTFtNW81bDlOVDlaNmh3NVM3LTExVnVxREk2bGplZnJrV3B6M3FkT3g1Z0tzQVR6RTZNTEk0TUhlck5HUXhHbUxsakVwZ3p1bWtYQnhmbkxEeUlDblp1NU9iWnBvd0kxcmU2eG4wYXJHdEdV?oc=5"
+  "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPbkRJOEc3WTdqUkVsMWZpR3N3eEdQOTFtNW81bDlOVDlaNmh3NVM3LTExVnVxREk2bGplZnJrV3B6M3FkT3g1Z0tzQVR6RTZNTEk0TUhlck5HUXhHbUxsakVwZ3p1bWtYQnhmbkxEeUlDblp1NU9iWnBvd0kxcmU2eG4wYXJHdEdV?oc=5",
+  "https://www.liverpool.com/liverpool-fc-news/features/steven-gerrard-slams-man-utd-34826485",
+  "https://www.liverpool.com/liverpool-fc-news/features/curtis-jones-inter-milan-transfer-34826344",
+  "https://news.google.com/rss/articles/CBMiigFBVV95cUxObk92bE8wMGpDX2NSMkdYRDZpMlBlWE1OdEtUeEpNLXV1S0JFdW8wNGZ5eU9iQXZhRTMtelNQTVZ4bVdyV19oMm1vczVZemc4MFZDMENGM2V4WnNJWkNYdk10bUp5Mzlqc25uZHpDZGIxNlU4djlIc2libVpkdHl1c2Njb0tBU25fS1E?oc=5",
+  "https://news.google.com/rss/articles/CBMiowFBVV95cUxPbTB6V1E0Y0txb2xhOGNWOWxZWkhUelRjR0RGRjZJR2lzdTFOeUhwdzBkeGJoY2twT3o3Wmg3ak82NmU4OUdnWllGQVJ5TG9MVHAxb0tKeVBRYVNvRVBNUFEzeWo2WEdES2FHb3JyRDlhMmYyeGpEeHFLcW9rNFROWmZ2Uk4wWnlNc2VyY2djNVh5MVRwbThvWl9GRWtEZGpiTzN3?oc=5"
 ]
