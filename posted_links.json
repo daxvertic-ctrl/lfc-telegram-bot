@@ -1,12 +1,4 @@
 [
-  "https://news.google.com/rss/articles/CBMiowFBVV95cUxPbTB6V1E0Y0txb2xhOGNWOWxZWkhUelRjR0RGRjZJR2lzdTFOeUhwdzBkeGJoY2twT3o3Wmg3ak82NmU4OUdnWllGQVJ5TG9MVHAxb0tKeVBRYVNvRVBNUFEzeWo2WEdES2FHb3JyRDlhMmYyeGpEeHFLcW9rNFROWmZ2Uk4wWnlNc2VyY2djNVh5MVRwbThvWl9GRWtEZGpiTzN3?oc=5",
-  "https://www.liverpool.com/liverpool-fc-news/features/michael-carrick-man-utd-klopp-34826552",
-  "https://www.liverpool.com/liverpool-fc-news/features/florian-wirtz-chelsea-xabi-alonso-34826755",
-  "https://www.liverpoolecho.co.uk/sport/football/football-news/xabi-alonso-following-florian-wirtz-34825160",
-  "https://news.google.com/rss/articles/CBMingFBVV95cUxNbjBobWZjNU5mREVsYWgyRS1ud0N3Vm13TUNwOWxfZ3V1UnU3eG94bVByWDNxSnBlYl9nUlRCNTByVWRUNE51bEY3emxnekRncXlIaUFKeFA2aUlQNGItb3BVZHRtbXRueDhpWURuUEJkcnRyQmZNTHAyRXljenBRUUNVTHZRUTF3aXA0VmVDa01tcUhTcWhOV29BUUU5dw?oc=5",
-  "https://www.liverpoolecho.co.uk/sport/football/football-news/andoni-iraola-stopped-talking-xabi-34823231",
-  "https://news.google.com/rss/articles/CBMipwFBVV95cUxOLVNhQXJoY0VNMU80R2R3VUkwQVZwbXBqQTZMaHJHQjhLejlrM1c5Wm9Zb3Bfd3l2TjUyWlFyNk1xT25mU0ttMWR5R05NRnJFeEZRQ2QtOGpqZ29MWkxYQmtRXzVwSUppcGdlRkhxU0pxNjlZQjVsbFY1TC0zNFBlRWFyZUQtTk5PZ3hNMVh4bThwNmZqZ0NRX0YxQmItdmMxWTBRY2lQVdIBrAFBVV95cUxQVFZ6WWs1aUtEdmI3SURzLXJPM19GLW1pUmV0ZTdqQXlNbFZVd0dkazF1N1V5QnF3UE5hdFNZZk9vQVJDWEwtVUNFQTI3ZHhBMDRmZFlPTTEwUjZ5bFNyTlVYWUIzSWo1dWNTcTFiaXpPbWh0YjM3VlRCSmtzbWtoRVZsN2tvVnc5MG1JSUREQmlxUENnLU1IZjhCamQ1V1R1QXJGamJyUGMxLXBU?oc=5",
-  "https://www.liverpool.com/liverpool-fc-news/features/andoni-iraola-chelsea-arsenal-fixtures-34825835",
   "https://www.liverpoolecho.co.uk/sport/football/football-news/liverpool-chelsea-jordan-henderson-transfer-34822539",
   "https://www.liverpool.com/liverpool-fc-news/transfer-news/liverpool-transfer-news-trent-quansah-34823245",
   "https://www.liverpoolecho.co.uk/sport/football/football-news/twelve-players-could-miss-liverpool-34823153",
@@ -248,5 +240,13 @@
   "https://www.liverpoolecho.co.uk/sport/football/football-news/bradley-barcola-left-arsenal-confused-34845193",
   "https://news.google.com/rss/articles/CBMirwFBVV95cUxORXYtWGZ6MmdNb2NyTFZ2NUU1dUxkT0lPcVZLU2pDOTF1V1pLdENYa0M2eGprYmduQ1k4X3JQMGtDdXFRdjlOQXE5Ukh3VUhKWnA0UFY5OHFWcUtVeDk3V1BwVEhVSl9QcjFVVktPdzc5NENKeHlJSFgtbDM1Z2cwX0w4ak1mRjMxVEx0TElpdUh0b0p1UUtVWUFBYmV6NmU4VW9zYnpNRUhnbUVUQWpB0gGvAUFVX3lxTE5Fdi1YZnoyZ01vY3JMVnY1RTV1TGRPSU9xVktTakM5MXVXWkt0Q1hrQzZ4amtiZ25DWThfclAwa0N1cVF2OU5BcTlSSHdVSEpacDRQVjk4cVZxS1V4OTdXUHBUSFVKX1ByMVVWS093Nzk0Q0p4eUlIWC1sMzVnZzBfTDhqTWZGMzFUTHRMSWl1SHRvSnVRS1VZQUFiZXo2ZThVb3Niek1FSGdtRVRBakE?oc=5",
   "https://news.google.com/rss/articles/CBMib0FVX3lxTFBHZzBHNjVJeUgza3FGUEJYcVlsZXNMNElLSUlsZ2d1eDY2YW1fanhxZmFKWm9ZVWRYYnRkRzVUUTExOHF5SGl1THo1cUlGS1BwQ3F2WEJBa05GTGh4YXhTcHdxckdXMXNxaFo2aW50SQ?oc=5",
-  "https://news.google.com/rss/articles/CBMirAFBVV95cUxNLWd6MWpGM1ZNTVlWYUkyX045anVTRGl1US1nVjk4ck5HVVh2WnJuNERjanFIWjJQcGpRVXhTQWh2Sm01dXBraDBGd0R6al9nRXBVZXQ2ek9kcWdmVWNxbEthV2Y3ZE85NWg2V0Y1aDZZOG5OY0lyVzY5bmxkTmhtS2FjdUdvMGZla2NXVldfS2d3ZXlMampBZU53YUgxNEp3TXBYZTJTYnItS0pq0gGyAUFVX3lxTE9xVEEyUXVtcXVCVGtJRUxsUzJpRG9aX0NrQmRsMXRBeENOUHNJcTZwclhnVXVDSlk2WXpqcDNYRWRDX2dNV3hPMUdndERrd3UxRFJnLTdkdlBrWjBUNjhscms5dGdWb19JaDMxX1hMLXl4bFFxdGpXSUg2S3dwN09hX2pTczlCQUl3T2hwcUFoOGNHcWtZdDQ0aEhJNUZhNkRzdFY3NFFkMXptSmNJcG9uY2c?oc=5"
+  "https://news.google.com/rss/articles/CBMirAFBVV95cUxNLWd6MWpGM1ZNTVlWYUkyX045anVTRGl1US1nVjk4ck5HVVh2WnJuNERjanFIWjJQcGpRVXhTQWh2Sm01dXBraDBGd0R6al9nRXBVZXQ2ek9kcWdmVWNxbEthV2Y3ZE85NWg2V0Y1aDZZOG5OY0lyVzY5bmxkTmhtS2FjdUdvMGZla2NXVldfS2d3ZXlMampBZU53YUgxNEp3TXBYZTJTYnItS0pq0gGyAUFVX3lxTE9xVEEyUXVtcXVCVGtJRUxsUzJpRG9aX0NrQmRsMXRBeENOUHNJcTZwclhnVXVDSlk2WXpqcDNYRWRDX2dNV3hPMUdndERrd3UxRFJnLTdkdlBrWjBUNjhscms5dGdWb19JaDMxX1hMLXl4bFFxdGpXSUg2S3dwN09hX2pTczlCQUl3T2hwcUFoOGNHcWtZdDQ0aEhJNUZhNkRzdFY3NFFkMXptSmNJcG9uY2c?oc=5",
+  "https://www.thisisanfield.com/2026/11/liverpool-aiming-to-set-new-unbeaten-anfield-record-against-arsenal/",
+  "https://www.thisisanfield.com/2026/11/liverpool-fc-team-news-vs-arsenal-injuries-suspensions-available-squad/",
+  "https://www.liverpool.com/liverpool-fc-news/features/liverpool-arsenal-tv-channel-stream-34845959",
+  "https://www.liverpool.com/liverpool-fc-news/features/13-players-could-miss-liverpool-34844377",
+  "https://www.liverpoolecho.co.uk/sport/football/football-news/liverpool-vs-arsenal-predictions-six-34845804",
+  "https://www.liverpoolecho.co.uk/sport/football/football-news/liverpool-arsenal-andoni-iraola-arteta-34837873",
+  "https://www.liverpoolecho.co.uk/sport/football/football-news/liverpool-line-ups-vs-arsenal-34841720",
+  "https://www.bbc.co.uk/sport/football/articles/ckzd6217j7pgo?at_medium=RSS&at_campaign=rss"
 ]
