@@ -1,14 +1,4 @@
 [
-  "https://news.google.com/rss/articles/CBMivgFBVV95cUxNQXdSOVRMUmxCam1VWGhCaUhiU1lubXVLWWFyMTE4S3hTUWdqWmZuZkk0c25TM1ZHOHZBZXRLd18xUlFIMmlYY3JYZU1LT1lUMVFpdU5xY0w4cUZJbjRabk1iZ2hxekg0cTl2SXRKcmtZemtmV21tbElnTnhRNFp2T1BHcjdBWHBYX2ZRMXhBREhJaENJNlpmYWQ2bC05UGZvOHVJcElIcGQ2VzBSUnJVRE84TkxGb3FVNnVvcEVB?oc=5",
-  "https://news.google.com/rss/articles/CBMi5wFBVV95cUxObWY2TjhPRmNVbFp4ZGNmQTlFbThXaU4xZFFqeXdKOWV3eFNvb3E1bFpMZ2diYWh5cTMxYVNVcjNValVFYjlhVlcxa0RCWHV0NThrVFR1WmdlSmFDTXN0X3ZJdGJGNGlNb2M0VVRwVDRHZHpxVXZPSkJXY2ZPSmItLVlGRmxJdDBLZ0Q5RFdBdlFVUUJuc0Zid2VtX2h5Y3o5LUl3Tl93ZzRBUEdhRHUxQnNWVDAxbWVmano5dC1XWHNzSWxqZG0tSkJuQjhrVU5LdktCT1BaeW9vRHpxUGY4WEt6R3FCeFE?oc=5",
-  "https://www.liverpool.com/liverpool-fc-news/features/ifeanyi-ndukwe-atletico-madrid-prediction-34845534",
-  "https://www.liverpool.com/liverpool-fc-news/features/jose-mourinho-responds-idea-trent-34845565",
-  "https://www.liverpool.com/liverpool-fc-news/features/federico-chiesa-transfer-juventus-gasperini-34845633",
-  "https://news.google.com/rss/articles/CBMi-AFBVV95cUxOLVdoWDFjQ2JGX044QzNOdm5rSS1CbmhtT05MWEdUa3BwQ2hmc2U2UDgxRzRfOG5TaE1sOXZ0anVzTTJyeEdUYktuanIxY1dSTzg5RGgxN0c1bkRYX1dpWG9jYjQtUDhRZU9kOTFEVlRCal9OOG01TE1TeGR4MkRVaHM5akRwMTVscEZoUkVBSUZsMVNEYVIxY1lIaFczNHpTaWwzczczLWFJWlg1TzRhX2pQQlZ2S0pQM2dMaHNydzlIN05tMW11VnJCM2VsaW5rQUdGTVlhS0NtUE5DVmxuX2d4R01aWXZXc3E4T01RTVNFaklBOUkteQ?oc=5",
-  "https://www.liverpool.com/liverpool-fc-news/features/gary-neville-man-utd-prediction-34845873",
-  "https://www.liverpoolecho.co.uk/sport/football/football-news/alexander-isak-liverpool-arsenal-wirtz-34844622",
-  "https://news.google.com/rss/articles/CBMirAFBVV95cUxQcy1ZcGJ4NWI0TUFfUVlJYVdHNzk1YXZfVUgtUF9MMUNVdjZyMHJfdy0xY2R5OUg2bDZEZzR5c0toN2NKZWpZRW9EWGtWWnAwWDhIc0FpNE9xUEFoeHIyYU5tRFpnbGRXTzNlaWpxQnJPNW9oZWlNbUdjZ1RqZVdJY3JNeFF0T3lXenZSRWdicE04NDdFeGFQSk5hVGhPczF1TG9tTVJQcmxvOVgz0gGyAUFVX3lxTFBFMjRzc1FtRTIxQjBMeHhxbk1JZmcwV2xuWXF6T01lZG9Ld2o4LWpkQkNxVUh4Mlh0eEd2ZjN5TlRPRGIxeWZBX3BxcHp6THlqV2prWEJ2TkpHRkZsSXQyMnZFLTBtYTZYRy1yVjJnbXZpT2dzM2lPTWR1NFFXSzhVekVmd1JwZUVVMHp5VGlpaDhySXBHdW5JUkk5SjJHY0JjMjVfaHVfdWl5elAtbWhLVHc?oc=5",
-  "https://www.liverpool.com/liverpool-fc-news/features/arsenal-mikel-arteta-andoni-iraola-34845774",
   "https://www.liverpoolecho.co.uk/sport/football/football-news/liverpool-arsenal-injury-news-latest-34845908",
   "https://www.liverpoolecho.co.uk/sport/football/football-news/liverpool-arsenal-alex-oxlade-chamberlain-34828280",
   "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNRFp4dU90Z3FjREpuRmJ6MWdSUG45N2ItZV82bE5tRnR5bXRpSXJRckRJSEZwMlY2TXZsR19mYngwWGl3bmJCYVE2a3lNTE5jQWlHU05scG56MWFQTEgwWENPMWxiTG5VaDQ1czZKMHVJMmVzc1RHaVJkTVJJQmZyWkhMVENha3V1a0NnVWhHRHY3Zl90UlVyVUZGdm5wRmdHbE9LVlZ6WHNjUdIBrwFBVV95cUxORXYtWGZ6MmdNb2NyTFZ2NUU1dUxkT0lPcVZLU2pDOTF1V1pLdENYa0M2eGprYmduQ1k4X3JQMGtDdXFRdjlOQXE5Ukh3VUhKWnA0UFY5OHFWcUtVeDk3V1BwVEhVSl9QcjFVVktPdzc5NENKeHlJSFgtbDM1Z2cwX0w4ak1mRjMxVEx0TElpdUh0b0p1UUtVWUFBYmV6NmU4VW9zYnpNRUhnbUVUQWpB?oc=5",
@@ -248,5 +238,15 @@
   "https://www.liverpoolecho.co.uk/sport/football/football-news/fenerbahce-vs-liverpool-u19-live-34860321",
   "https://www.liverpoolecho.co.uk/sport/football/football-news/liverpool-line-ups-vs-fenerbahce-34859993",
   "https://news.google.com/rss/articles/CBMinAFBVV95cUxOMU9HWTM5YUp3SUpWckQ5TzJ3SXZ1b01CdXFTZDY4Q3lxVzBaWTFnSlBLWkZaY2lDOTdpTm5qLXhFLW1tWXA4Z3BtWHBhaG1OWnVfVmRlbkxRZXhUMEMyZlZmSkhzSVdtdklOUFFZRG9pSWszLWJvRGFXeElqOV9aTWpYaTZXeG5PS0Y2UUtDT09LaWdTU3dLN1lEMy0?oc=5",
-  "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNX1FPRm1wT2lpMzNXWWM1VlRYWGU0M04xRXFiS0Z5QUhSdi0weks2Y1lsVl9sYkVsMURmcEN1d2FqSUthN19tQWdYUWw3b0p6cFNGczVWQm45TUlXVHR3Znd2WHhfOTZMQWt0VlgtamRQRTZEc1dnRWZURzU5SXE0ajNFcXVBb1Zp?oc=5"
+  "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNX1FPRm1wT2lpMzNXWWM1VlRYWGU0M04xRXFiS0Z5QUhSdi0weks2Y1lsVl9sYkVsMURmcEN1d2FqSUthN19tQWdYUWw3b0p6cFNGczVWQm45TUlXVHR3Znd2WHhfOTZMQWt0VlgtamRQRTZEc1dnRWZURzU5SXE0ajNFcXVBb1Zp?oc=5",
+  "https://www.thisisanfield.com/2026/11/liverpool-confirmed-lineup-fenerbahce-team-news-champions-league/",
+  "https://www.thisisanfield.com/2026/11/fenerbahce-liverpool-how-to-watch-live-stream-kick-off-time-tv-channels/",
+  "https://www.thisisanfield.com/2026/11/liverpool-bournemouth-carabao-cup-date-confirmed-schedule/",
+  "https://www.empireofthekop.com/2026/11/04/liverpool-team-news-v-fenerbahce-iraola-shuffles-the-pack-with-5-changes-isak-and-wirtz-benched/",
+  "https://www.liverpool.com/liverpool-fc-news/features/fenerbahce-liverpool-live-score-updates-34862978",
+  "https://www.liverpool.com/liverpool-fc-news/features/team-confirmed-fenerbahce-szoboszlai-ngumoha-34863487",
+  "https://www.liverpool.com/liverpool-fc-news/transfer-news/alisson-becker-transfer-liverpool-flamengo-34863148",
+  "https://www.liverpoolecho.co.uk/sport/football/football-news/fenerbahce-vs-liverpool-live-team-34863318",
+  "https://www.liverpoolecho.co.uk/sport/football/football-news/liverpool-fenerbahce-champions-league-tv-34854195",
+  "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOeWJGRUJNSGluWVFxWHNyTTdGSXA0Xzl6bnZ5SlFxT1BqTndMUjVRVWRnQjRvamsyQjltdnR0VnR2NnAwYU1VblMzbGlEczkyd3lIdWhseEdxcUMyNGJUQ1ZJZGVCUmVvekg2MEpkN2tRR0FQQXJEWVJUb0dQdGQzLXZzUXRQVkxZLXpicUtkUXc4TlpEV1p3MXVwdS02Mzk0YmpsX2hhZy1maHhqU3lMcXRiMXlsbVVDR3Jv?oc=5"
 ]
