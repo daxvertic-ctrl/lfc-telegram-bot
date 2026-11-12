@@ -1,11 +1,4 @@
 [
-  "https://www.liverpool.com/liverpool-fc-news/features/carragher-jacquet-mac-allister-palace-34881768",
-  "https://www.liverpoolecho.co.uk/sport/football/football-news/what-left-andoni-iraola-very-34880334",
-  "https://www.liverpoolecho.co.uk/sport/football/football-news/alissons-livid-reaction-speaks-volumes-34880325",
-  "https://www.bbc.co.uk/sport/football/videos/cw7vp2jjrqygo?at_medium=RSS&at_campaign=rss",
-  "https://news.google.com/rss/articles/CBMijgFBVV95cUxPb0RYSTljVEEyTjRnR3k3czdDMjAzNWlKQjRFbUxfdDU3cC05ZFk4aTdXSmpfTWR1WFNiUzJZN0ZUYkJqTEZ2aHdWaTNzelZqMVNxZzNzV3VHR2JmSE9wMGhLcl92Q1VOVVNDYkFQMzFkcU9McWVIYm4weXg2ZHpoS00wLXIxWHBmMXZNbzBn?oc=5",
-  "https://www.thisisanfield.com/2026/11/iraola-sage-reaction-crystal-palace-liverpool/",
-  "https://www.liverpool.com/liverpool-fc-news/features/andoni-iraola-international-break-fear-34882031",
   "https://www.liverpool.com/liverpool-fc-news/features/florian-wirtz-crystal-palace-goals-34882037",
   "https://www.liverpool.com/liverpool-fc-news/features/pierre-sage-crystal-palace-manager-34880676",
   "https://www.liverpoolecho.co.uk/sport/football/match-reports/liverpool-rediscovered-character-under-andoni-34880330",
@@ -248,5 +241,12 @@
   "https://www.thisisanfield.com/2026/11/ifeanyi-ndukwe-red-card-international-break-austria/",
   "https://www.liverpool.com/liverpool-fc-news/features/man-utd-carrick-fired-liverpool-34900308",
   "https://www.liverpoolecho.co.uk/sport/football/football-news/manchester-united-sack-manager-michael-34815155",
-  "https://news.google.com/rss/articles/CBMi6gFBVV95cUxQOEhzU0JtaDQxUVB5UUc4WXVCX29ScndndzJwQm14SUlOcXhtZUYtM29MR2wyWGloTG1fc0xHOHJ1MFBJZFZIQ1owOEtwam4xQktPSXUwalZ0UUZYb0lKWHpDekdvT1JfSkFkS3VSXzNWUEg4eTZTd3gwQjA3MnE1Y3ZQS3JZYUlYdlJJaVRBenRxRXk3aFBWTDFUZER0TnlxcmVRZ0VNdUJUMWxCdWZWVFBsX3JSajk3WWpQR3h6MVR0LUdic0c0WHZLVW1RdXY0STJvLVNUbHR2eXdaeHhqSXpLbl9NZUFROWc?oc=5"
+  "https://news.google.com/rss/articles/CBMi6gFBVV95cUxQOEhzU0JtaDQxUVB5UUc4WXVCX29ScndndzJwQm14SUlOcXhtZUYtM29MR2wyWGloTG1fc0xHOHJ1MFBJZFZIQ1owOEtwam4xQktPSXUwalZ0UUZYb0lKWHpDekdvT1JfSkFkS3VSXzNWUEg4eTZTd3gwQjA3MnE1Y3ZQS3JZYUlYdlJJaVRBenRxRXk3aFBWTDFUZER0TnlxcmVRZ0VNdUJUMWxCdWZWVFBsX3JSajk3WWpQR3h6MVR0LUdic0c0WHZLVW1RdXY0STJvLVNUbHR2eXdaeHhqSXpLbl9NZUFROWc?oc=5",
+  "https://www.thisisanfield.com/2026/11/man-united-sack-michael-carrick-mauricio-pochettino-liverpool/",
+  "https://www.empireofthekop.com/2026/11/12/manchester-united-sack-michael-carrick-before-liverpool-clash/",
+  "https://www.liverpool.com/liverpool-fc-news/features/ronald-araujo-liverpool-fans-trophy-34900270",
+  "https://www.liverpool.com/liverpool-fc-news/features/man-utd-142-word-statement-34900589",
+  "https://www.liverpool.com/liverpool-fc-news/features/ex-man-utd-star-makes-34899947",
+  "https://news.google.com/rss/articles/CBMi6AFBVV95cUxOT1VDNTNmTVJtTVVDNDBOcUdDajZnaVREM0IyUC1pRnVCazZhSURRczZodUxlWXZ4eE04Ty1OZUptOWJkYzJvQVlleVVOTDZObXFhZVNWOUFQYUNfQW1obGtlYVEyVzh6R19IdGFQYnlQOW8xX2FrLWgtUzhPZVlPcC1nTHpjc3FobVA5VXJBVjZ1NW9NZ2JfTXFLUjZGR0RZSVNwaTJEeTJoaGMxY0lGOHFBc242ZGNlMlo4dWd0QXVTcnAzYThSYU43Q212QnNiUFJHcFJIQ21uM19OY3YwdzRLdzU2a1BD?oc=5",
+  "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQazdiWTdWZGJBNzhwejRvSFpJOVJqMzRNWkZhaHVsWEdzU0VXMEpQNjNEc203eHBKVmlCRy1xTWtWUmpKdHA1RmhWRkx1SXVxSVQ2X1I1NVVYbmljVk02NUxQWjRZWHRyMnA3VWNVdWJfX0NHUnphaHNNS3dzczJCd0lLOE1UajVMR19aLWo1Q1h3aEpDbFBsSm00blhEY1E1RW52UUlYcnU5QVVlaGFYSnd2bVlPeTNyNmdweWs3Yk1EWnNaSXI0WVFXWmNzVFFLUkZVc1l3?oc=5"
 ]
