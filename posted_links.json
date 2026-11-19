@@ -1,9 +1,4 @@
 [
-  "https://news.google.com/rss/articles/CBMinwFBVV95cUxPTHZiY2dmQWFyd3BaalRybmpKWGtBRkR6ODFsMVNmTmdxczBGNm44aktVQW1KeFI1VzIwQnQza2JWMFhFSldKX3ZxTmQ0MFFQOUstai1UZzJmX0FuZExOOEpMTnFwb3J6NnJxVV9ibFBJZVZvOG5ENF95ME5JeFFkT2d2RGcxYnV5NkpDTEZLdnlmWEd4ZXdsZXl0U1VvUVHSAaQBQVVfeXFMT2RYN2dJVHRDZ0t6N2xBVnpDWU1NTFE3MFlDMExWZVkzU25ZZ0lac0l4RTBacEMxaFh6WlVxOGgyQjZydFlBdmxmOEs2Q2VwenFlMVFSSEtORkdzLS1rYVo3SFNwTWI3cXh3ZXJ1M2dUcmtIY1VDeG1TYlBNZWpUc0E5V3RBU3FXNTJpQi0teU5nQm1fWG5RRHV4ZF9zYWU3ckNIRjg?oc=5",
-  "https://www.liverpool.com/liverpool-fc-news/features/jurgen-klopp-slams-fifa-infantino-34915545",
-  "https://news.google.com/rss/articles/CBMinwFBVV95cUxQY1BuOWJFdUVHaWJMdWtnVjNEMF94c21EdVJMSDN6NmZBMW55U2tKdERsM0RaZzVfQy1fTGRlLVFHY2ZacllpUnQtck1LOFFNcE5ZUW1xblhrZXJWY1hlc0c2VDZONkNKU0JoNUJ6Z25NQURZVWlwNk9GR3pHNlNNbk5SR3hPcnlSZmZSTVhqeDRubFZHNjFsZ0dneFFBVlU?oc=5",
-  "https://www.liverpool.com/liverpool-fc-news/features/jeremy-jacquet-liverpool-ibrahima-konate-34915718",
-  "https://news.google.com/rss/articles/CBMilgFBVV95cUxNR2FQYXItY2dGR2FicFp1LUx5bGIybmVQSmVNcmNlZGNJZFptc1pJbXk5bWlsd25ubjYxWkpQVTJWYmxuM2xpUzRRbGRJU1JDVW1DNFdWeEVucXJad1J3bVZIVk9zQTVYMzMtSTRESEwwdUYzRlpOVWtFOWxUeGlkRG5DcFRaQ090ODBWN1N4c2l5TE1MWVE?oc=5",
   "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOT2RUQ3BrUXRVM2dPVEtrekxSaDE2c3liU0J6ODNsWHpMcDhhXy12N3JENDNOZjNKdW9EVXNoNk0xRV95bmJOcmd0SFVJNUg1UlB0NkVCMldlMlJtbHlIc2JicW0tZkZhSXhaZzVmZVZ2UnIzOTZKT0o5cW50dFN5eW5wN0hlOGN2?oc=5",
   "https://news.google.com/rss/articles/CBMilwFBVV95cUxOQkJtM2VoQ19laUYzRGlIV0d4Xy1SallPaXE5OFN4R3lLZS1WdVAxaHRuTmVhUFJSQkxITzFXN01VOFA3cmNOSkN5MzJ4UjRxS04wd2ozcjdWeTBXZFJUcElhblk2eXJGUHNoODRhNjdMLWQwT2hvZDBBSlhZWkcxdFgtd1pvRFoxRFBUbVcwNF8zaEVPMVVV?oc=5",
   "https://www.liverpool.com/liverpool-fc-news/transfer-news/liverpool-transfer-de-cuyper-ndukwe-34914420",
@@ -248,5 +243,10 @@
   "https://www.liverpool.com/liverpool-fc-news/features/josh-king-fulham-florian-wirtz-34936166",
   "https://www.liverpoolecho.co.uk/whats-on/whats-on-news/lfc-foundation-gala-ball-tickets-34936157",
   "https://www.liverpoolecho.co.uk/sport/football/football-news/liverpool-transfers-jarrad-branthwaite-best-34936224",
-  "https://news.google.com/rss/articles/CBMi3AFBVV95cUxNMnBxczJBMk9Ua05zazJNSWkwZUFDMzVxSktiNzhQSmFaclBweUtMeUNOMWI4Y1pqWHFDLUNSY3I2cWg3OXVITXM1MFhQVWtHTDZldTJ1QjB4QUhEQ1ZRZVhSam5oOS1pc0h3MTl4UGtzSDcxQlh6eE1BZ2tnNFh3NGV2QlU3QWVZZjlOdHdiLVF3WmVnZVF0WUtzWko0VnVqaGYyYkYwczBpLXdZZ3JmanlRdWJmcWFkcDN5NTJWd3MycEVwSjkwRFE3Mk1KQmNCM2Y5UkVFbVNrR1dD?oc=5"
+  "https://news.google.com/rss/articles/CBMi3AFBVV95cUxNMnBxczJBMk9Ua05zazJNSWkwZUFDMzVxSktiNzhQSmFaclBweUtMeUNOMWI4Y1pqWHFDLUNSY3I2cWg3OXVITXM1MFhQVWtHTDZldTJ1QjB4QUhEQ1ZRZVhSam5oOS1pc0h3MTl4UGtzSDcxQlh6eE1BZ2tnNFh3NGV2QlU3QWVZZjlOdHdiLVF3WmVnZVF0WUtzWko0VnVqaGYyYkYwczBpLXdZZ3JmanlRdWJmcWFkcDN5NTJWd3MycEVwSjkwRFE3Mk1KQmNCM2Y5UkVFbVNrR1dD?oc=5",
+  "https://www.empireofthekop.com/2026/11/19/liverpool-games-v-man-united-everton-moved-tv-coverage/",
+  "https://www.empireofthekop.com/2026/11/19/liverpool-training-four-players-provide-iraola-with-timely-boost/",
+  "https://www.liverpool.com/liverpool-fc-news/features/liverpool-premier-league-manchester-city-34937422",
+  "https://news.google.com/rss/articles/CBMingFBVV95cUxPZVJhWlRSQU10Tnl5MmI0YW9DeVh0clN3VzhEel9FMlFtTW9DVTR4ejB6ZkkwaUZkX3FoS0RqcS1pSDF0ekpwYml6ak1RdmF0OXNySzF0aUtOWkZKc0ItSldYVFlBYXF5c09tSWdBa1hiLTZGV0t3cHp1bVoxSkh4TU4ySVVNMUJnWWMtV1hpYVo0MkpxcjZGRFZuRTQzZw?oc=5",
+  "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPX19YMHlQNWE0SlBOM1Z0aENlcUt2VnljOGloSjhKTFhuSjdsRGM2bW9pcEM4N0ItNmtnSU5tZ2V1UEh2b29lQlFTNUVjaUtZbDVpTlJFcXNoNVFSMTJjMVZyamdHdG1LRkhOcUxLRHp1QXhwa21LWUpkVC1pNmtoQTJ1Rk5CQkJ2YXNXa0lUSWdQekNnbFN2aGk2OWRlMXAtbjcwZnlxUFVtcnBjeXE3YUJUUHlneXQ0RE5Cck5WMDA4TTFENjFrTUJocVc3UXIyU1dvb2Q4bGM?oc=5"
 ]
