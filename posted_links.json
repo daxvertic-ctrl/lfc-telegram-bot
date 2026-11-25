@@ -1,14 +1,4 @@
 [
-  "https://www.thisisanfield.com/2026/11/liverpool-18-clubs-premier-league-legal-costs-man-city/",
-  "https://www.liverpool.com/liverpool-fc-news/transfer-news/liverpool-green-light-transfers-january-34937882",
-  "https://www.liverpool.com/liverpool-fc-news/features/pochettino-exemption-premier-league-liverpool-34937411",
-  "https://www.liverpoolecho.co.uk/sport/football/football-news/ex-liverpool-star-explains-trey-34935230",
-  "https://www.thisisanfield.com/2026/11/lamine-camara-liverpool-scout-report-stats-fit/",
-  "https://www.thisisanfield.com/2026/11/liverpool-eyeing-young-striker-4-injury-updates-latest-lfc-news/",
-  "https://www.thisisanfield.com/2026/11/fernando-torres-liverpool-exit-regret-chelsea-legends-return/",
-  "https://www.liverpool.com/liverpool-fc-news/features/julian-ward-risks-breaking-fsgs-34938846",
-  "https://www.liverpool.com/liverpool-fc-news/features/fernando-torres-liverpool-exit-henry-34938427",
-  "https://www.liverpoolecho.co.uk/sport/football/football-news/liverpool-patient-over-conor-bradley-34938052",
   "https://www.liverpool.com/liverpool-fc-news/features/spotted-liverpool-training-missing-vandijk-34938856",
   "https://www.liverpoolecho.co.uk/sport/football/football-news/liverpool-transfer-news-fernando-torres-34938916",
   "https://news.google.com/rss/articles/CBMilgFBVV95cUxPSjlPbTRIVDdyR1dOSU5RcXV6Q2hIN2c2bXIzTWdGT3NzaHNxWUh3UGpmN0pNbXNVSFkzc09nQ012YlJxbVZOYUZTcGZySnBQcTR3TUJvTUU2Y0hZQU5XUEJocVREN2lTRTM2cnFIZUJfb1lnTlFkU21nc3FoalliQXhlcGhMcU5PMDZPalMwQ0FYUHk2UWc?oc=5",
@@ -248,5 +238,15 @@
   "https://news.google.com/rss/articles/CBMi5wFBVV95cUxPU1kxOThtRDUwVjhMaXluMVNTWnQzZ2hoY2cwcTlkQ3VBZnBDaU1PZWFUeDZ5d0FzNFBKRFdRRUoxOEdURjV0QlBTZWZfTlk4djRheDRUZTZIM1dXaGpZeDZaTUdIdE1aMS16Q2Y3OFRxam5FV1FQLWtIY3B0OXNCU0pSaGVXbEp6em8yYllEYjdwZ1FWQ3U4V1pyNUlLMS1LRTd0b0RMc0dHOFE4VmtkeW5DeFdOQ0RWc2VRODZYMkhnRnZnZ1hjV3FqYU5HVWJjaGxjMFBYb19WRmt0d0h5bVlUVFdqZlU?oc=5",
   "https://news.google.com/rss/articles/CBMi2wFBVV95cUxPX3daVlRVZ21yY2h4WVBzMHdwN2RPYldlbTVHcy1uNzdTRk90b1ZIeTFnWU5VTFF4TWQ5cXFIaEtDUjBiQ0xNdU1WcF9tN2VqLUt4Q2RiUFdhN1lMdjZtYW4zSVRvd0ltOUs1Q0lVVXgzV2ZobjdVVUUwb3FLNlFlbnZzUzAwc1hqM1hLazJsUVpkZmZrRGtERWQ0R1RKOVdXS0RwTEhzS0hINXVwTERfWVRkaDF6QXNVVmpSZ1p1WEF1dS0wbXJQS05uRzJPdnhCMEIxQXpyQnpZRGs?oc=5",
   "https://news.google.com/rss/articles/CBMikwFBVV95cUxOWkxsUjVNTEFFUkF5N3NnbEVQbUQ2Nzl3RjlleGxRZ1QzallEZGNfalYzTWNHUWRVWlR1djZaR2VPTHFjQjZHMzA0Sm1HaWRpZXg5TDh6VEs0QlJLUHN1U1UwQUZ2TnlzZERSeUNkbkJSenJITk1FYm1WaXZWeEJLS2E0bGd0OHpSOEFFdVZTZ3J0VW8?oc=5",
-  "https://news.google.com/rss/articles/CBMi6AFBVV95cUxNa1ktQXNoeTJwalNOZ3dFLVJ6bTBQZWVTbzg3dG9faGE4QlZydjV3VHQwNjhDZUp2U1JlTDZNZElOTkhHdWZZNUlsMXRJOTlOakNYXzE3a2pJX0NoS1R3Z2phVzZocTdRZUhMclhmd01GajZFME5yRXpqY0JHekIwVWxsM0E5M1lOWjlnN3U5OUlPb1haWllFS0FSX3JiYW10bWJNQzdtOTZmQmtENWVDRUtiQXozcDFjR0E5dkIzVm1ZeFBwekQ2aG0yVG9ZVDVSekpiTGpfX2tGOGVoZ01tR21yYUVKTm80?oc=5"
+  "https://news.google.com/rss/articles/CBMi6AFBVV95cUxNa1ktQXNoeTJwalNOZ3dFLVJ6bTBQZWVTbzg3dG9faGE4QlZydjV3VHQwNjhDZUp2U1JlTDZNZElOTkhHdWZZNUlsMXRJOTlOakNYXzE3a2pJX0NoS1R3Z2phVzZocTdRZUhMclhmd01GajZFME5yRXpqY0JHekIwVWxsM0E5M1lOWjlnN3U5OUlPb1haWllFS0FSX3JiYW10bWJNQzdtOTZmQmtENWVDRUtiQXozcDFjR0E5dkIzVm1ZeFBwekQ2aG0yVG9ZVDVSekpiTGpfX2tGOGVoZ01tR21yYUVKTm80?oc=5",
+  "https://www.thisisanfield.com/2026/11/club-brugge-vs-liverpool-marks-2nd-longest-wait-in-lfc-history/",
+  "https://www.thisisanfield.com/2026/11/liverpool-fc-team-news-vs-club-brugge-22-man-squad-injuries/",
+  "https://www.empireofthekop.com/2026/11/19/liverpool-games-v-man-united-everton-moved-tv-coverage/",
+  "https://www.liverpool.com/liverpool-fc-news/features/garnacho-aston-villa-elliott-liverpool-34961986",
+  "https://www.liverpool.com/liverpool-fc-news/features/liverpool-club-brugge-champions-league-34961921",
+  "https://www.liverpool.com/liverpool-fc-news/features/bradley-barcola-liverpool-manchester-united-34961942",
+  "https://www.liverpoolecho.co.uk/sport/football/football-news/andoni-iraola-florian-wirtz-know-34959696",
+  "https://www.liverpoolecho.co.uk/sport/football/football-news/liverpool-florian-wirtz-steven-gerrard-34961689",
+  "https://www.liverpoolecho.co.uk/sport/football/football-news/career-over-stayed-liverpool-make-34961458",
+  "https://news.google.com/rss/articles/CBMikgFBVV95cUxNNWJXcEY2NWJqd3NOV3BYVkpZRnB0WEVoMlg3UC1UeEJvNV9ISEtpTjQ0UzNpR1JQU09hWVFZOF9pN1RwREx2X09wbmd5WWdCS19fMGhmZUFRazU5MzdFNlVYT2hTaFM5eXBrdVl6ZXdkUkd3Zmg2bkFLTTRWRnFFcW9QYlo0cFhybW5yMkpPbU9LUQ?oc=5"
 ]
